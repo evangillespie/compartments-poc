@@ -13,7 +13,7 @@ setup(
 	entry_points={
         'console_scripts':[
             'hello = main:hello_world',
-            'draw_dxf = main:draw_dxf'
+            'draw_dxf_from_sample_plan = main:draw_dxf_from_sample_plan'
         ]
 	},
 )
