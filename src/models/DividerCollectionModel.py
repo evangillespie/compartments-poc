@@ -54,6 +54,18 @@ class DividerCollectionModel(Model):
 
 
 	"""
+	Return all the dividers in the collection
+
+	:param collection: the collection to fetch dividers from
+
+	:return: list of all dividers in the collection
+	"""
+	@classmethod
+	def get_all_dividers_in_collection(cls, collection):
+		return collection.dividers
+
+
+	"""
 	Retreive a particular divider by name
 
 	:param collection: the collection to get it from

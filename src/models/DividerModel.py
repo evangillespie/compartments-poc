@@ -39,12 +39,26 @@ class DividerModel(Model):
 			name = None
 
 		div = Divider(name=name, thickness=thickness)
-		div.add_point(0, height)
-		div.add_point(width, height)
-		div.add_point(width, 0)
+		div.add_point('outline', 0, 0)
+		div.add_point('outline', 0, height)
+		div.add_point('outline', width, height)
+		div.add_point('outline', width, 0)
 
 		logger.info("Creating Divider(%s)" % name)
+
 		return div
+
+
+	"""
+	get the name of all layers in a particular divider
+
+	:param divider: the divider to get layer names in
+
+	:return: list of layer names (strings)
+	"""
+	@classmethod
+	def get_layers_in_divider(cls, divider):
+		return divider.points.keys()
 
 
 	"""
@@ -58,8 +72,25 @@ class DividerModel(Model):
 	@classmethod
 	def get_points_for_layer_in_divider(cls, divider, layer):
 		
-		# ignore layer for now. It's not been implemented yet
-		return divider.points
+		if layer in divider.points:		
+			return divider.points[layer]['points']
+		return None
+
+
+	"""
+	return the color assigned to a layer
+
+	:param divider: the Divider to return color for
+	:param layer: the name of the layer to return points for
+
+	:return: (int)color integer assigned to the layer
+	"""
+	@classmethod
+	def get_color_for_layer_in_divider(cls, divider, layer):
+		
+		if layer in divider.points:		
+			return divider.points[layer]['color']
+		return None
 
 
 # -----------------------------------------------
@@ -73,9 +104,12 @@ class Divider():
 	def __init__(self, name=None, thickness=None, *args, **kwargs):
 		self.name = name
 		self.thickness = thickness
+		self.last_color = 0
 
-		# points is a list of (x,y) tuples that represent points at the ends of lines
-		self.points = list()
+		# each layer is a dict element containing:
+			# layer parameters like name and color
+			# a list of (x,y) tuples that represent points at the ends of lines
+		self.points = dict();
 
 
 	"""
@@ -86,13 +120,24 @@ class Divider():
 
 	:return: None
 	"""
-	def add_point(self, x, y):
+	def add_point(self, layer, x, y):
 
-		# if we don't have a point yet, start at 0
-		if not self.points:
-			self.points.append((0, 0))
+		if layer not in self.points:
+			self.points[layer] = {
+				'name': layer,
+				'color': self.get_next_color(),
+				'points': [],
+			}
 
-		self.points.append((x, y))
+		self.points[layer]['points'].append((x, y))
+
+
+	"""
+	get the next available color for a new layer
+	"""
+	def get_next_color(self):
+		self.last_color += 1
+		return self.last_color
 
 
 	"""
@@ -100,10 +145,11 @@ class Divider():
 	"""
 	def __repr__(self):
 		ret = "Divider (%s)[%s]" % (self.name, len(self.points))
-		if len(self.points) > 0:
+		if 'outline' in self.points and len(self.points['outline']['points']) > 0:
+			pts = self.points['outline']['points']
 			ret = ret + " << "
-			ret = ret + "[%s, %s]" % (self.points[0][0], self.points[0]	[1])
-			for p in self.points[1:]:
+			ret = ret + "[%s, %s]" % (pts[0][0], pts[0]	[1])
+			for p in pts[1:]:
 				ret = ret + "->[%s, %s]" % (p[0], p[1])
 			ret = ret + " >>"
 

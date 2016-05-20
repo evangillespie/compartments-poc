@@ -38,11 +38,18 @@ class DxfWriteController(Controller):
 		filepath = join(dxf_folder, filename)
 
 		dwg = ezdxf.new('R2010')  # create a new DXF R2010 drawing, official DXF version name: 'AC1024'
-		msp = dwg.modelspace()  # add new entities to the model space
-		
-		points = DividerController.get_points_for_layer_in_divider(divider, "outline") 
-		points.append(points[0]) # make the points into a closed polygon
-		msp.add_lwpolyline(points)
+		msp = dwg.modelspace()
+
+		for layer_name in DividerController.get_layers_in_divider(divider):
+			dwg.layers.new(
+				name=layer_name,
+				dxfattribs={
+					'color': DividerController.get_color_for_layer_in_divider(divider, layer_name)
+				}
+			)
+			points = DividerController.get_points_for_layer_in_divider(divider, layer_name) 
+			points.append(points[0]) # make the points into a closed polygon
+			msp.add_lwpolyline(points, dxfattribs={'layer': layer_name})
 
 		dwg.saveas(filepath)
 

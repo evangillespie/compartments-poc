@@ -33,6 +33,18 @@ class DividerController(Controller):
 
 
 	"""
+	get the name of all layers in a particular divider
+
+	:param divider: the divider to get layer names in
+
+	:return: list of layer names (strings)
+	"""
+	@classmethod
+	def get_layers_in_divider(cls, divider):
+		return DividerModel.get_layers_in_divider(divider)
+
+
+	"""
 	return a list of points for a particular layer in a Divider
 
 	:param divider: the Divider to return points for
@@ -43,3 +55,16 @@ class DividerController(Controller):
 	@classmethod
 	def get_points_for_layer_in_divider(cls, divider, layer):
 		return DividerModel.get_points_for_layer_in_divider(divider, layer)
+
+
+		"""
+	return the color assigned to a layer
+
+	:param divider: the Divider to return color for
+	:param layer: the name of the layer to return points for
+
+	:return: (int)color integer assigned to the layer
+	"""
+	@classmethod
+	def get_color_for_layer_in_divider(cls, divider, layer):
+		return DividerModel.get_color_for_layer_in_divider(divider, layer)
