@@ -9,7 +9,10 @@
 __author__ = "Evan Gillespie"
 
 
+import logging
 from Model import Model
+
+logger = logging.getLogger(__name__)
 
 
 class DividerCollectionModel(Model):
@@ -30,6 +33,7 @@ class DividerCollectionModel(Model):
 		else:
 			id = "Sample"
 
+		logger.info("Creating new DividerCollection (%s)" % id)
 		return DividerCollection(id)
 
 
@@ -45,6 +49,7 @@ class DividerCollectionModel(Model):
 	def add_divider_to_collection(cls, collection, divider, *args, **kwargs):
 		collection.add_divider_to_collection(divider)
 
+		logger.debug("Adding Divider(%s) to DividerCollection(%s)" % (divider.name, collection.id))
 		return collection
 
 

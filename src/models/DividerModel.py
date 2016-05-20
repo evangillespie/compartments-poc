@@ -9,7 +9,10 @@
 __author__ = "Evan Gillespie"
 
 
+import logging
 from Model import Model
+
+logger = logging.getLogger(__name__)
 
 
 class DividerModel(Model):
@@ -40,6 +43,7 @@ class DividerModel(Model):
 		div.add_point(width, height)
 		div.add_point(width, 0)
 
+		logger.info("Creating Divider(%s)" % name)
 		return div
 
 

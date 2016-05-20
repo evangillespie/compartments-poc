@@ -1,6 +1,8 @@
+
+import logging
+import click
 from src.controllers.OrganizerPlanController import OrganizerPlanController
 from src.controllers.BuilderController import BuilderController
-import click
 
 
 @click.command()
@@ -9,12 +11,20 @@ def hello_world():
 
 
 
+"""
+	take a sample plan object and turn it into a dxf drawing
+	of a bunch of dividers
+"""
 @click.command()
 def draw_dxf_from_sample_plan():
-	"""
-		take a sample plan object and turn it into a dxf drawing
-		of a bunch of dividers
-	"""
+
+	logging.basicConfig(
+		filename='app.log',
+		filemode='w',
+		format="%(asctime)-20s %(levelname)s:%(name)s :: %(message)s",
+		datefmt='%Y-%M-%d %H:%M:%S',
+		level=logging.INFO,
+	)
 
 	plan = OrganizerPlanController.get_sample_plan()
 

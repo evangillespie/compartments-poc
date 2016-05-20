@@ -7,9 +7,11 @@
 __author__ = "Evan Gillespie"
 
 
+import logging
 from Controller import Controller
 from DividerCollectionController import DividerCollectionController
 
+logger = logging.getLogger( __name__ )
 
 class BuilderController(Controller):
 
@@ -67,4 +69,3 @@ class BuilderController(Controller):
 				plan['thickness'],
 				name='bottom_edge',
 			)
-		print repr(collection)
