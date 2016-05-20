@@ -42,8 +42,7 @@ class DxfWriteController(Controller):
 		
 		points = DividerController.get_points_for_layer_in_divider(divider, "outline") 
 		points.append(points[0]) # make the points into a closed polygon
-		for i in range(len(points) - 1):
-			msp.add_line(points[i], points[i+1])
+		msp.add_lwpolyline(points)
 
 		dwg.saveas(filepath)
 
