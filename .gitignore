@@ -90,3 +90,6 @@ ENV/
 
 # any logs
 *.log
+
+* generated .dxf files
+dxf_files/

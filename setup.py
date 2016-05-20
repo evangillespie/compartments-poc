@@ -8,7 +8,8 @@ setup(
 		'main'
 	],
 	install_requires=[
-		'Click'
+		'Click',
+		'ezdxf',
 	],
 	entry_points={
         'console_scripts':[

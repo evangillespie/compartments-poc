@@ -53,6 +53,22 @@ class DividerCollectionModel(Model):
 		return collection
 
 
+	"""
+	Retreive a particular divider by name
+
+	:param collection: the collection to get it from
+	:param name: name of the Divider to get
+
+	:return: Divider in the collection with the name. None if no name found
+	"""
+	@classmethod
+	def get_divider_with_name_from_collection(cls, collection, name):
+		for d in collection.dividers:
+			if d.name == name:
+				return d
+		return None
+
+
 # -----------------------------------------------
 # ------------- Data Model Below ----------------
 # -----------------------------------------------

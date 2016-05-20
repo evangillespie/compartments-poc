@@ -47,6 +47,21 @@ class DividerModel(Model):
 		return div
 
 
+	"""
+	return a list of points for a particular layer in a Divider
+
+	:param divider: the Divider to return points for
+	:param layer: the name of the layer to return points for
+
+	:return: list of points ((x,y) tuples) that belong to the layer for the Divider
+	"""
+	@classmethod
+	def get_points_for_layer_in_divider(cls, divider, layer):
+		
+		# ignore layer for now. It's not been implemented yet
+		return divider.points
+
+
 # -----------------------------------------------
 # ------------- Data Model Below ----------------
 # -----------------------------------------------

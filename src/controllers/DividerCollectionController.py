@@ -56,3 +56,16 @@ class DividerCollectionController(Controller):
 	def add_divider_to_collection(cls, collection, divider, *args, **kwargs):
 		DividerCollectionModel.add_divider_to_collection(collection, divider)
 
+
+	"""
+	Retreive a particular divider by name
+
+	:param collection: the collection to get it from
+	:param name: name of the Divider to get
+
+	:return: Divider in the collection with the name. None if no name found
+	"""
+	@classmethod
+	def get_divider_with_name_from_collection(cls, collection, name):
+		return DividerCollectionModel.get_divider_with_name_from_collection(collection, name)
+
