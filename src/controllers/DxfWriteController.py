@@ -9,13 +9,12 @@ __author__ = "Evan Gillespie"
 
 import logging
 import ezdxf
-from os.path import dirname, join
+from os.path import join
 from Controller import Controller
 from DividerController import DividerController
+from ..config import DXF_DEST_DIR
 
 logger = logging.getLogger( __name__ )
-
-dxf_folder = join(dirname(dirname(dirname(__file__))), "dxf_files")
 
 
 class DxfWriteController(Controller):
@@ -35,9 +34,9 @@ class DxfWriteController(Controller):
 	"""
 	@classmethod
 	def draw_divider_to_dxf(cls, divider, filename):
-		filepath = join(dxf_folder, filename)
+		filepath = join(DXF_DEST_DIR, filename)
 
-		dwg = ezdxf.new('R2010')  # create a new DXF R2010 drawing, official DXF version name: 'AC1024'
+		dwg = ezdxf.new('R2010')
 		msp = dwg.modelspace()
 
 		for layer_name in DividerController.get_layers_in_divider(divider):
@@ -48,7 +47,7 @@ class DxfWriteController(Controller):
 				}
 			)
 			points = DividerController.get_points_for_layer_in_divider(divider, layer_name) 
-			points.append(points[0]) # make the points into a closed polygon
+			points.append(points[0]) # make the points into a closed loop
 			msp.add_lwpolyline(points, dxfattribs={'layer': layer_name})
 
 		dwg.saveas(filepath)
