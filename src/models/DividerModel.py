@@ -59,27 +59,15 @@ class Divider():
 		self.y_length = y_length
 		self.thickness = thickness
 
-		# list of (x,y) points that make up the outer perimeter
-		self.points = []
-		self.points.append((0,0))
-		self.points.append((0, y_length))
-		self.points.append((x_length, y_length))
-		self.points.append((x_length, 0))
+		# a list of joinery elements to be added or subtracted from the base rectangle
+		self.joinery = []
 
 
 	"""
 	unabiguous string description of the divider
 	"""
 	def __repr__(self):
-		ret = "Divider (%s)[%s]" % (self.name, len(self.points))
-		if 'outline' in self.points and len(self.points['outline']['points']) > 0:
-			pts = self.points['outline']['points']
-			ret = ret + " << "
-			ret = ret + "[%s, %s]" % (pts[0][0], pts[0]	[1])
-			for p in pts[1:]:
-				ret = ret + "->[%s, %s]" % (p[0], p[1])
-			ret = ret + " >>"
-
+		ret = "Divider (%s)[%s,%s]" % (self.name, self.x_length, self.y_length)
 		return ret
 
 
@@ -87,5 +75,8 @@ class Divider():
 	basic string description of the divider
 	"""
 	def __str__(self):
-		return "Divider (%s)[%s]" % (self.name, len(self.points))
+		if self.name:
+			return "Divider (%s)" % (self.name)
+		else:
+			return "Divider (--)"
 
