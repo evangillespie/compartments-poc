@@ -31,15 +31,15 @@ class DividerCollectionController(object):
 	Add a new rectangualar Divider to a DividerCollection
 
 	:param collection: the collection to add the newe divider to
-	:param length: length of the new divider
-	:param width: width of the new divider
+	:param x_length: x_length of the new divider
+	:param y_length: y_length of the new divider
 	:param thickness: thickness of the new divider
 
 	:return: None
 	"""
 	@classmethod
-	def add_rectangular_divider_to_collection(cls, collection, length, width, thickness, *args, **kwargs):
-		div = DividerController.create_rectangular_divider(length, width, thickness, *args, **kwargs)
+	def add_rectangular_divider_to_collection(cls, collection, x_length, y_length, thickness, *args, **kwargs):
+		div = DividerController.create_rectangular_divider(x_length, y_length, thickness, *args, **kwargs)
 		cls.add_divider_to_collection(collection, div)
 
 

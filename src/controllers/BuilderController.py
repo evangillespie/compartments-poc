@@ -35,11 +35,15 @@ class BuilderController(object):
 		collection = DividerCollectionController.create_empty_divider_collection()
 
 		DividerCollectionController.add_rectangular_divider_to_collection(
-			name="test",
+			name="base",
 			collection=collection,
-			length=150,
-			width=100,
+			x_length=plan['x_length'],
+			y_length=plan['y_length'],
 			thickness=6
 		)
+
+		print collection
+		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
+			print d
 
 		# @TODO: break the plan down into dividers

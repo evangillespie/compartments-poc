@@ -25,20 +25,20 @@ class DividerModel(object):
 	"""
 	Create a simple rectangular Divider
 
-	:param length: length of the rectangle
-	:param width: width of the rectangle
+	:param x_length: x_length of the rectangle
+	:param y_length: y_length of the rectangle
 	:param thickness: thickness of the wood the divider will be made from
 
 	:return: a Divider object representing a simple rectangle
 	"""
 	@classmethod
-	def create_rectangular_divider(cls, length, width, thickness, *args, **kwargs):
+	def create_rectangular_divider(cls, x_length, y_length, thickness, *args, **kwargs):
 		if 'name' in kwargs:
 			name = kwargs['name']
 		else:
 			name = None
 
-		div = Divider(name=name, length=length, width=width, thickness=thickness)
+		div = Divider(name=name, x_length=x_length, y_length=y_length, thickness=thickness)
 
 		logger.debug("Creating Divider(%s)" % name)
 
@@ -53,18 +53,18 @@ class DividerModel(object):
 class Divider():
 
 
-	def __init__(self, name=None, length=None, width=None, thickness=None, *args, **kwargs):
+	def __init__(self, name=None, x_length=None, y_length=None, thickness=None, *args, **kwargs):
 		self.name = name
-		self.length = length
-		self.width = width
+		self.x_length = x_length
+		self.y_length = y_length
 		self.thickness = thickness
 
 		# list of (x,y) points that make up the outer perimeter
 		self.points = []
 		self.points.append((0,0))
-		self.points.append((0, width))
-		self.points.append((length, width))
-		self.points.append((length, 0))
+		self.points.append((0, y_length))
+		self.points.append((x_length, y_length))
+		self.points.append((x_length, 0))
 
 
 	"""

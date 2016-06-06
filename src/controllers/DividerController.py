@@ -20,12 +20,12 @@ class DividerController(object):
 	"""
 	Create a simple rectangular Divider
 
-	:param length: length of the rectangle
-	:param width: width of the rectangle
+	:param x_length: x_length of the rectangle
+	:param y_length: y_length of the rectangle
 	:param thickness: thickness of the wood the divider will be made from
 
 	:return: a Divider object representing a simple rectangle
 	"""
 	@classmethod
-	def create_rectangular_divider(cls, length, width, thickness, *args, **kwargs):
-		return DividerModel.create_rectangular_divider(length, width, thickness, *args, **kwargs)
+	def create_rectangular_divider(cls, x_length, y_length, thickness, *args, **kwargs):
+		return DividerModel.create_rectangular_divider(x_length, y_length, thickness, *args, **kwargs)
