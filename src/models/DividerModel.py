@@ -10,87 +10,39 @@ __author__ = "Evan Gillespie"
 
 
 import logging
-from Model import Model
+
 
 logger = logging.getLogger(__name__)
 
 
-class DividerModel(Model):
+class DividerModel(object):
 
 
 	def __init__(self, *args, **kwargs):
-		self.last_divider_id = 0
+		pass
 
 
 	"""
 	Create a simple rectangular Divider
 
+	:param length: length of the rectangle
 	:param width: width of the rectangle
-	:param height: height of the rectangle
 	:param thickness: thickness of the wood the divider will be made from
 
 	:return: a Divider object representing a simple rectangle
 	"""
 	@classmethod
-	def create_rectangular_divider(cls, width, height, thickness, *args, **kwargs):
+	def create_rectangular_divider(cls, length, width, thickness, *args, **kwargs):
 		if 'name' in kwargs:
 			name = kwargs['name']
 		else:
 			name = None
 
-		div = Divider(name=name, thickness=thickness)
-		div.add_point('outline', 0, 0)
-		div.add_point('outline', 0, height)
-		div.add_point('outline', width, height)
-		div.add_point('outline', width, 0)
+		div = Divider(name=name, length=length, width=width, thickness=thickness)
 
-		logger.info("Creating Divider(%s)" % name)
+		logger.debug("Creating Divider(%s)" % name)
 
 		return div
-
-
-	"""
-	get the name of all layers in a particular divider
-
-	:param divider: the divider to get layer names in
-
-	:return: list of layer names (strings)
-	"""
-	@classmethod
-	def get_layers_in_divider(cls, divider):
-		return divider.points.keys()
-
-
-	"""
-	return a list of points for a particular layer in a Divider
-
-	:param divider: the Divider to return points for
-	:param layer: the name of the layer to return points for
-
-	:return: list of points ((x,y) tuples) that belong to the layer for the Divider
-	"""
-	@classmethod
-	def get_points_for_layer_in_divider(cls, divider, layer):
-		
-		if layer in divider.points:		
-			return divider.points[layer]['points']
-		return None
-
-
-	"""
-	return the color assigned to a layer
-
-	:param divider: the Divider to return color for
-	:param layer: the name of the layer to return points for
-
-	:return: (int)color integer assigned to the layer
-	"""
-	@classmethod
-	def get_color_for_layer_in_divider(cls, divider, layer):
-		
-		if layer in divider.points:		
-			return divider.points[layer]['color']
-		return None
 
 
 # -----------------------------------------------
@@ -101,43 +53,18 @@ class DividerModel(Model):
 class Divider():
 
 
-	def __init__(self, name=None, thickness=None, *args, **kwargs):
+	def __init__(self, name=None, length=None, width=None, thickness=None, *args, **kwargs):
 		self.name = name
+		self.length = length
+		self.width = width
 		self.thickness = thickness
-		self.last_color = 0
 
-		# each layer is a dict element containing:
-			# layer parameters like name and color
-			# a list of (x,y) tuples that represent points at the ends of lines
-		self.points = dict();
-
-
-	"""
-	add a single point to the end of the divider list of points
-
-	:param x: x coordinate of the new point
-	:param y: y coordinate of the new point
-
-	:return: None
-	"""
-	def add_point(self, layer, x, y):
-
-		if layer not in self.points:
-			self.points[layer] = {
-				'name': layer,
-				'color': self.get_next_color(),
-				'points': [],
-			}
-
-		self.points[layer]['points'].append((x, y))
-
-
-	"""
-	get the next available color for a new layer
-	"""
-	def get_next_color(self):
-		self.last_color += 1
-		return self.last_color
+		# list of (x,y) points that make up the outer perimeter
+		self.points = []
+		self.points.append((0,0))
+		self.points.append((0, width))
+		self.points.append((length, width))
+		self.points.append((length, 0))
 
 
 	"""

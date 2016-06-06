@@ -7,11 +7,10 @@
 __author__ = "Evan Gillespie"
 
 
-from Controller import Controller
 from ..models.OrganizerPlanModel import OrganizerPlanModel
 
 
-class OrganizerPlanController(Controller):
+class OrganizerPlanController(object):
 
 
 	def __init__(self):

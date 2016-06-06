@@ -7,12 +7,11 @@
 __author__ = "Evan Gillespie"
 
 
-from Controller import Controller
 from ..models.DividerCollectionModel import DividerCollectionModel
 from .DividerController import DividerController
 
 
-class DividerCollectionController(Controller):
+class DividerCollectionController(object):
 
 
 	def __init__(self, *args, **kwargs):
@@ -32,15 +31,15 @@ class DividerCollectionController(Controller):
 	Add a new rectangualar Divider to a DividerCollection
 
 	:param collection: the collection to add the newe divider to
+	:param length: length of the new divider
 	:param width: width of the new divider
-	:param height: height of the new divider
 	:param thickness: thickness of the new divider
 
 	:return: None
 	"""
 	@classmethod
-	def add_rectangualar_divider_to_collection(cls, collection, width, height, thickness, *args, **kwargs):
-		div = DividerController.create_rectangular_divider(width, height, thickness, *args, **kwargs)
+	def add_rectangular_divider_to_collection(cls, collection, length, width, thickness, *args, **kwargs):
+		div = DividerController.create_rectangular_divider(length, width, thickness, *args, **kwargs)
 		cls.add_divider_to_collection(collection, div)
 
 
@@ -66,7 +65,7 @@ class DividerCollectionController(Controller):
 	"""
 	@classmethod
 	def get_all_dividers_in_collection(cls, collection):
-		DividerCollectionModel(cls, collection)
+		return DividerCollectionModel.get_all_dividers_in_collection(collection)
 
 	"""
 	Retreive a particular divider by name

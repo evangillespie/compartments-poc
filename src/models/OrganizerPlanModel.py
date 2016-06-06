@@ -8,10 +8,7 @@
 __author__ = "Evan Gillespie"
 
 
-from Model import Model
-
-
-class OrganizerPlanModel(Model):
+class OrganizerPlanModel(object):
 
 
 	def __init__(self):
@@ -31,4 +28,7 @@ class OrganizerPlanModel(Model):
 			'length': 200,
 			'height': 15,
 			'thickness': 6,
+			'compartments': [
+				# @TODO: how do i do this?
+			]
 		}

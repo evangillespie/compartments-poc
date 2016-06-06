@@ -15,7 +15,7 @@ from Model import Model
 logger = logging.getLogger(__name__)
 
 
-class DividerCollectionModel(Model):
+class DividerCollectionModel(object):
 
 
 	def __init__(self, *args, **kwargs):
