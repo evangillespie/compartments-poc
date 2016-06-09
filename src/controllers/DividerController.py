@@ -27,5 +27,5 @@ class DividerController(object):
 	:return: a Divider object representing a simple rectangle
 	"""
 	@classmethod
-	def create_rectangular_divider(cls, x_length, y_length, thickness, *args, **kwargs):
-		return DividerModel.create_rectangular_divider(x_length, y_length, thickness, *args, **kwargs)
+	def create_rectangular_divider(cls, x_length, y_length, thickness, name=None, *args, **kwargs):
+		return DividerModel.create_rectangular_divider(x_length, y_length, thickness, name, *args, **kwargs)

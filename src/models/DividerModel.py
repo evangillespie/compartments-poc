@@ -32,11 +32,9 @@ class DividerModel(object):
 	:return: a Divider object representing a simple rectangle
 	"""
 	@classmethod
-	def create_rectangular_divider(cls, x_length, y_length, thickness, *args, **kwargs):
-		if 'name' in kwargs:
-			name = kwargs['name']
-		else:
-			name = None
+	def create_rectangular_divider(cls, x_length, y_length, thickness, name=None, *args, **kwargs):
+		if not name:
+			logger.error("Trying to create a divider without a name. That'll be trouble")
 
 		div = Divider(name=name, x_length=x_length, y_length=y_length, thickness=thickness)
 

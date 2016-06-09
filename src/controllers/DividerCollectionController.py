@@ -35,25 +35,17 @@ class DividerCollectionController(object):
 	:param y_length: y_length of the new divider
 	:param thickness: thickness of the new divider
 
-	:return: None
+	:return: name of the divider
 	"""
 	@classmethod
-	def add_rectangular_divider_to_collection(cls, collection, x_length, y_length, thickness, *args, **kwargs):
-		div = DividerController.create_rectangular_divider(x_length, y_length, thickness, *args, **kwargs)
-		cls.add_divider_to_collection(collection, div)
+	def add_rectangular_divider_to_collection(cls, collection, x_length, y_length, thickness, name=None, *args, **kwargs):
+		if not name:
+			name = DividerCollectionModel.get_new_name(collection)
 
+		div = DividerController.create_rectangular_divider(x_length, y_length, thickness, name)
+		DividerCollectionModel.add_divider_to_collection(collection, div)
 
-	"""
-	Add a Divider to a DividerCollection
-
-	:param collection: the collection to add it to
-	:param divider: the Divider to add to the collection
-
-	:return: updated DividerCollection
-	"""
-	@classmethod
-	def add_divider_to_collection(cls, collection, divider, *args, **kwargs):
-		DividerCollectionModel.add_divider_to_collection(collection, divider)
+		return name
 
 
 	"""

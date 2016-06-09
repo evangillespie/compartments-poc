@@ -34,16 +34,33 @@ class BuilderController(object):
 
 		collection = DividerCollectionController.create_empty_divider_collection()
 
+		"""
+		read a compartments list and save dividers and relations or that compartment
+		"""
+		# @TODO: add name of left, top, right, bottom dividers to arguments for referencing
+		def validate_and_interpret_compartments(compartments):
+			# if there are no compartments, this is the bottom level
+			if not compartments:
+				return
+
+			for c in compartments:
+				validate_and_interpret_compartments(c['compartments'])
+
+
+
 		DividerCollectionController.add_rectangular_divider_to_collection(
-			name="base",
 			collection=collection,
 			x_length=plan['x_length'],
 			y_length=plan['y_length'],
-			thickness=6
+			thickness=plan['thickness' ],
+			name="BASE"
 		)
 
-		print collection
-		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
-			print d
+		DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=100,
+			y_length=200,
+			thickness=plan['thickness' ]
+		)
 
-		# @TODO: break the plan down into dividers
+		validate_and_interpret_compartments(plan['compartments'])

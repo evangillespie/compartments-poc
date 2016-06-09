@@ -10,7 +10,10 @@ __author__ = "Evan Gillespie"
 
 
 import logging
+import random
+import string
 from Model import Model
+from ..config import GENERATED_DIVIDER_NAME_LENGTH
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +51,7 @@ class DividerCollectionModel(object):
 	@classmethod
 	def add_divider_to_collection(cls, collection, divider, *args, **kwargs):
 		collection.add_divider_to_collection(divider)
+		collection.names.append(divider.name)
 
 		logger.debug("Adding Divider(%s) to DividerCollection(%s)" % (divider.name, collection.id))
 		return collection
@@ -81,6 +85,25 @@ class DividerCollectionModel(object):
 		return None
 
 
+	"""
+	Return a new (unused) name for a Divider in the collection
+
+	:param collection:
+
+	:return: (string) a new name
+	"""
+	@classmethod
+	def get_new_name(cls, collection):
+		choice = None
+		while not choice or choice in collection.names:
+			choice = ''.join(
+							[
+								random.choice(string.ascii_uppercase) \
+									for _ in range(GENERATED_DIVIDER_NAME_LENGTH)
+							]
+						)
+		return choice
+
 # -----------------------------------------------
 # ------------- Data Model Below ----------------
 # -----------------------------------------------
@@ -92,6 +115,7 @@ class DividerCollection():
 	def __init__(self, id, *args, **kwargs):
 		self.id = id
 		self.dividers = list()
+		self.names = []	#used names
 
 
 
