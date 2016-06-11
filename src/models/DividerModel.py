@@ -36,7 +36,7 @@ class DividerModel(object):
 		if not name:
 			logger.error("Trying to create a divider without a name. That'll be trouble")
 
-		div = Divider(name=name, x_length=x_length, y_length=y_length, thickness=thickness)
+		div = Divider(name=name, x_length=x_length, y_length=y_length, thickness=thickness, *args, **kwargs)
 
 		logger.debug("Creating Divider(%s)" % name)
 
@@ -56,6 +56,13 @@ class Divider():
 		self.x_length = x_length
 		self.y_length = y_length
 		self.thickness = thickness
+
+		# Distance that this divider overlaps another.
+		# Joinery meansurements are ofset because of this.
+		self.joinery_offset=None
+
+		if 'joinery_offset' in kwargs:
+			self.joinery_offset = kwargs['joinery_offset']
 
 		# a list of joinery elements to be added or subtracted from the base rectangle
 		self.joinery = []

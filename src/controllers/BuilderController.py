@@ -34,20 +34,23 @@ class BuilderController(object):
 
 		collection = DividerCollectionController.create_empty_divider_collection()
 
-		"""
-		read a compartments list and save dividers and relations or that compartment
-		"""
-		# @TODO: add name of left, top, right, bottom dividers to arguments for referencing
-		def validate_and_interpret_compartments(compartments):
-			# if there are no compartments, this is the bottom level
-			if not compartments:
-				return
+		cls.create_base_and_edge_dividers_from_plan(collection, plan)
 
-			for c in compartments:
-				validate_and_interpret_compartments(c['compartments'])
+		print collection
+		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
+			print repr(d)
 
 
+	"""
+	create the base and outside edge dividers
 
+	:param collection: DividerCollection to store new divders in
+	:param plan: the base plan that defines dimensions to use
+
+	:return:
+	"""
+	@classmethod
+	def create_base_and_edge_dividers_from_plan(cls, collection, plan):
 		DividerCollectionController.add_rectangular_divider_to_collection(
 			collection=collection,
 			x_length=plan['x_length'],
@@ -56,11 +59,35 @@ class BuilderController(object):
 			name="BASE"
 		)
 
+		div_height = plan['height'] - plan['thickness']
+
 		DividerCollectionController.add_rectangular_divider_to_collection(
 			collection=collection,
-			x_length=100,
-			y_length=200,
-			thickness=plan['thickness' ]
+			x_length=plan['y_length'],
+			y_length=div_height,
+			thickness=plan['thickness' ],
+			name="LFT",
+			joinery_offset=plan['thickness']
 		)
-
-		validate_and_interpret_compartments(plan['compartments'])
+		DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=plan['y_length'],
+			y_length=div_height,
+			thickness=plan['thickness' ],
+			name="RHT",
+			joinery_offset=plan['thickness']
+		)
+		DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=plan['x_length'] -  2*plan['thickness'],
+			y_length=div_height,
+			thickness=plan['thickness' ],
+			name="TOP"
+		)
+		DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=plan['x_length'] -  2*plan['thickness'],
+			y_length=div_height,
+			thickness=plan['thickness' ],
+			name="BTM"
+		)

@@ -23,7 +23,7 @@ def draw_dxf_from_sample_plan():
 		filemode='w',
 		format="%(asctime)-20s %(levelname)s:%(name)s :: %(message)s",
 		datefmt='%Y-%M-%d %H:%M:%S',
-		level=logging.INFO,
+		level=logging.DEBUG,
 	)
 
 	plan = OrganizerPlanController.get_sample_plan()
