@@ -57,13 +57,6 @@ class Divider():
 		self.y_length = y_length
 		self.thickness = thickness
 
-		# Distance that this divider overlaps another.
-		# Joinery meansurements are ofset because of this.
-		self.joinery_offset=None
-
-		if 'joinery_offset' in kwargs:
-			self.joinery_offset = kwargs['joinery_offset']
-
 		# a list of joinery elements to be added or subtracted from the base rectangle
 		self.joinery = []
 
