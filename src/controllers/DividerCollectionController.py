@@ -49,6 +49,19 @@ class DividerCollectionController(object):
 
 
 	"""
+	Add a compartment to the collection
+
+	:param collection: the DividerCollection that will contain the Compartment
+	:param compartment: the Compartment that we are adding to the DividerCollection
+
+	:return:
+	"""
+	@classmethod
+	def add_compartment_to_collection(cls, collection, compartment):
+		DividerCollectionModel.add_compartment_to_collection(collection, compartment)
+
+
+	"""
 	Return all the dividers in the collection
 
 	:param collection: the collection to fetch dividers from

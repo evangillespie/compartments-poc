@@ -12,7 +12,6 @@ __author__ = "Evan Gillespie"
 import logging
 import random
 import string
-from Model import Model
 from ..config import GENERATED_DIVIDER_NAME_LENGTH
 
 logger = logging.getLogger(__name__)
@@ -36,7 +35,7 @@ class DividerCollectionModel(object):
 		else:
 			id = "Sample"
 
-		logger.info("Creating new DividerCollection (%s)" % id)
+		logger.debug("Creating new DividerCollection (%s)" % id)
 		return DividerCollection(id)
 
 
@@ -55,6 +54,19 @@ class DividerCollectionModel(object):
 
 		logger.debug("Adding Divider(%s) to DividerCollection(%s)" % (divider.name, collection.id))
 		return collection
+
+
+	"""
+	Add a compartment to the collection
+
+	:param collection: the DividerCollection that will contain the Compartment
+	:param compartment: the Compartment that we are adding to the DividerCollection
+
+	:return:
+	"""
+	@classmethod
+	def add_compartment_to_collection(cls, collection, compartment):
+		collection.add_compartment_to_collection(compartment)
 
 
 	"""
@@ -114,9 +126,10 @@ class DividerCollection():
 
 	def __init__(self, id, *args, **kwargs):
 		self.id = id
-		self.dividers = list()
-		self.names = []	#used names
+		self.dividers = []
+		self.compartments = []
 
+		self.names = []	#used names
 
 
 	"""
@@ -129,10 +142,19 @@ class DividerCollection():
 
 
 	"""
+	Add a new compartment to this collection
+
+	:param compartment: the compartment to be added
+	"""
+	def add_compartment_to_collection(self, compartment, *args, **kwargs):
+		self.compartments.append(compartment)
+
+
+	"""
 	unabiguous string description of the dividercollection
 	"""
 	def __repr__(self):
-		ret = "DividerCollection (%s)[%s]" % (self.id, len(self.dividers))
+		ret = "DividerCollection (%s)[D:%s C:%s]" % (self.id, len(self.dividers), len(self.compartments))
 		if len(self.dividers) > 0:
 			ret = ret + " << %s >>" % ",".join([d.name for d in self.dividers])
 
@@ -143,6 +165,6 @@ class DividerCollection():
 	basic string description of the divider
 	"""
 	def __str__(self):
-		return "DividerCollection (%s)[%s]" % (self.id, len(self.dividers))
+		return "DividerCollection (%s)[D:%s C:%s]" % (self.id, len(self.dividers), len(self.compartments))
 
 		
