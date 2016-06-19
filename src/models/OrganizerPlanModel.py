@@ -31,9 +31,9 @@ class OrganizerPlanModel(object):
 		|				|
 		|_______________|
 		|		|		|
+		|_______|		|
 		|		|		|
-		|		|		|
-		|		|		|
+		|_______|		|
 		|_______|_______|
 		'''
 
@@ -44,29 +44,61 @@ class OrganizerPlanModel(object):
 			'thickness': 6,	# Total heigth, including the base
 			'compartments': [
 				{
-					#  y means that interior dividers are parallel to the x axis. Useful for interior compartments
-					'orientation': 'y',
-					'length': 102,
+					'level': 1,	# useful for debugging
+					#  y means that interior dividers are parallel to the y axis.
+					'div_orientation': 'x',
+					'x_length': 108,
+					'y_length': 188,
 					'compartments': [
 						{
-							'orientation': 'x',
-							'length': 91,
+							'level': 2,
+							'div_orientation': 'y',
+							'x_length': 108,
+							'y_length': 91,
 							'compartments': [
 								{
-									'orientation': None,
-									'length': 48,
-									'compartments': []
+									'level': 3,
+									'div_orientation': 'x',
+									'x_length': 51,
+									'y_length': 91,
+									'compartments': [
+										{
+											'level': 4,
+											'div_orientation': None,
+											'x_length': 51,
+											'y_length': 43,
+											'compartments': []
+										},
+										{
+											'level': 4,
+											'div_orientation': None,
+											'x_length': 51,
+											'y_length': 18,
+											'compartments': []
+										},
+										{
+											'level': 4,
+											'div_orientation': None,
+											'x_length': 51,
+											'y_length': 18,
+											'compartments': []
+										}
+									]
 								},
 								{
-									'orientation': None,
-									'length': 48,
+									'level': 3,
+									'div_orientation': None,
+									'x_length': 51,
+									'y_length': 91,
 									'compartments': []
 								}
 							]
 						},
 						{
-							'orientation': None,
-							'length': 91,
+							'level': 2,
+							'div_orientation': None,
+							'x_length': 108,
+							'y_length': 91,
 							'compartments': []
 						}
 					]
