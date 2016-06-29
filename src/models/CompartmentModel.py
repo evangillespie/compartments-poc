@@ -32,15 +32,20 @@ class CompartmentModel(object):
 	:return: new Compartment object
 	"""
 	@classmethod
-	def create_new_compartment(cls, x_length, y_length, bounding_div_names, height, 
+	def create_new_compartment(cls, x_length, y_length, bounding_div_names, height,
 								offset=None, level=None, *args, **kwargs):
 		comp = Compartment(x_length, y_length, height)
 		comp.bounding_div_names['left'] = bounding_div_names[0]
 		comp.bounding_div_names['top'] = bounding_div_names[1]
 		comp.bounding_div_names['right'] = bounding_div_names[2]
 		comp.bounding_div_names['bottom'] = bounding_div_names[3]
-		comp.level = level
 		
+		if level:
+			comp.level = level
+
+		if offset:
+			comp.offset=offset
+
 		return comp
 
 
@@ -53,7 +58,7 @@ class Compartment():
 
 
 	def __init__(self, x_length, y_length, height, *args, **kwargs):
-		
+
 		self.x_length = x_length
 		self.y_length = y_length
 		self.height=height
@@ -62,11 +67,7 @@ class Compartment():
 
 		self.bounding_div_names={}
 
-		self.x_offset=None
-		self.y_ofset=None
-
-		# Might want to add: list of children or link to parent
-
+		self.offset=None
 
 	"""
 	unabiguous string description of the dividercollection
@@ -76,6 +77,8 @@ class Compartment():
 		if self.level:
 			ret += "[%s]" % self.level
 		ret += " (%s x %s x %s)" % (self.x_length, self.y_length, self.height)
+		if self.offset:
+			ret += "{%s,%s}" % (self.offset[0], self.offset[1])
 		if self.bounding_div_names:
 			ret += "< %s, %s, %s, %s >" % \
 				(self.bounding_div_names['left'], self.bounding_div_names['top'], 

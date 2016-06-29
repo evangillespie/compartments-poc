@@ -35,7 +35,7 @@ class CompartmentController(object):
 	:return: new Compartment
 	"""
 	@classmethod
-	def create_new_compartment(cls, x_length, y_length, bounding_div_names, height, 
+	def create_new_compartment(cls, x_length, y_length, bounding_div_names, height,
 								offset=None, level=None, *args, **kwargs):
 		return CompartmentModel.create_new_compartment(
 			x_length=x_length,
