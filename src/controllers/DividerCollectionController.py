@@ -50,6 +50,20 @@ class DividerCollectionController(object):
 
 
 	"""
+	Create a new compartment and add it to a collection
+
+	:param collection: The collection to add the new compartment to
+	:param x_length: x length of the new compartment
+	:param y_length: y length of the new compartment
+	:param bounding_div_names: Tuple of names of the dividers that enclose this 
+						compartment (left, top, right, bottom)
+	:param height: height of the compartment. Should be the same for each compartment in the collection
+	:param level: depth of this compartment. top level is 1
+	:param offset: Tuple of offsets from the parent compartment
+	:param name: name for this compartment. Unique in the collection
+
+
+	:return: newly created Compartment
 	"""
 	@classmethod
 	def add_new_compartment_to_collection(cls, collection, x_length, y_length, 

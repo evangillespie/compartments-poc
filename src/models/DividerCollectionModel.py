@@ -132,6 +132,8 @@ class DividerCollection():
 
 		self.names = []	#used divider or collection names
 
+		self.parents = {} #record of the parent of each compartment
+
 	"""
 	Add a new divider to this collection
 
