@@ -117,7 +117,8 @@ class BuilderController(object):
 		Create a compartment object and any dividers inside of it,
 		then call recursively for any compartments inside
 		"""
-		def recursively_interpret_compartment_plan(compartment_json, bounding_div_names, level=1, offset=None):
+		def recursively_interpret_compartment_plan(compartment_json, bounding_div_names, 
+				level=1, offset=None, parent_name=None):
 			
 			if not offset:
 				offset = (0,0)
@@ -130,7 +131,8 @@ class BuilderController(object):
 				bounding_div_names=bounding_div_names,
 				height=div_height,
 				level=level,
-				offset=offset
+				offset=offset,
+				parent_name=parent_name
 			)
 
 			child_comp_index = 0
@@ -176,7 +178,8 @@ class BuilderController(object):
 				recursively_interpret_compartment_plan(
 					child_comp_json,
 					new_bounding_div_names,
-					level=level+1
+					level=level+1,
+					parent_name=compartment.name
 				)
 
 

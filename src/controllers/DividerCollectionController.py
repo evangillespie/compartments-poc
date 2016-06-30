@@ -61,13 +61,13 @@ class DividerCollectionController(object):
 	:param level: depth of this compartment. top level is 1
 	:param offset: Tuple of offsets from the parent compartment
 	:param name: name for this compartment. Unique in the collection
-
+	:param parent_name: name of the parent compartment
 
 	:return: newly created Compartment
 	"""
 	@classmethod
 	def add_new_compartment_to_collection(cls, collection, x_length, y_length, 
-			bounding_div_names, height, level=None, offset=None, name=None):
+			bounding_div_names, height, level=None, offset=None, name=None, parent_name=None):
 		if not name:
 			name = DividerCollectionModel.get_new_name(collection)
 
@@ -80,6 +80,13 @@ class DividerCollectionController(object):
 			level=level,
 			name=name)
 		DividerCollectionModel.add_compartment_to_collection(collection, com)
+
+		if parent_name:
+			DividerCollectionModel.register_child_parent_names(
+				collection=collection,
+				child_name=name,
+				parent_name=parent_name
+			)
 
 		return com
 

@@ -98,6 +98,20 @@ class DividerCollectionModel(object):
 
 
 	"""
+	register one compartment as the parent of another within a collection
+
+	:param collection: the collection in question
+	:param child_name: name of the child object
+	:param parent_name: name of the parent object
+
+	:return:
+	"""
+	@classmethod
+	def register_child_parent_names(cls, collection, child_name, parent_name):
+		collection.parents[child_name] = parent_name
+
+
+	"""
 	Return a new (unused) name for a Divider or Compartment in the collection
 
 	:param collection:
