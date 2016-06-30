@@ -122,16 +122,15 @@ class BuilderController(object):
 			if not offset:
 				offset = (0,0)
 
-			compartment = CompartmentController.create_new_compartment(
+
+			compartment = DividerCollectionController.add_new_compartment_to_collection(
+				collection = collection,
 				x_length=compartment_json['x_length'],
 				y_length=compartment_json['y_length'],
 				bounding_div_names=bounding_div_names,
 				height=div_height,
 				level=level,
 				offset=offset
-			)
-			DividerCollectionController.add_compartment_to_collection(
-				collection, compartment
 			)
 
 			child_comp_index = 0

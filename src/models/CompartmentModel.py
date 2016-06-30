@@ -28,13 +28,14 @@ class CompartmentModel(object):
 						compartment (left, top, right, bottom)
 	:param height: height of the compartment. Should be the same for each compartment in the collection
 	:param offset: Tuple of offsets from the parent compartment
+	:param name: name for this compartment. Unique in the collection
 
 	:return: new Compartment object
 	"""
 	@classmethod
 	def create_new_compartment(cls, x_length, y_length, bounding_div_names, height,
-								offset=None, level=None, *args, **kwargs):
-		comp = Compartment(x_length, y_length, height)
+								offset=None, level=None, name=None, *args, **kwargs):
+		comp = Compartment(x_length, y_length, height, name=name)
 		comp.bounding_div_names['left'] = bounding_div_names[0]
 		comp.bounding_div_names['top'] = bounding_div_names[1]
 		comp.bounding_div_names['right'] = bounding_div_names[2]
@@ -57,7 +58,9 @@ class CompartmentModel(object):
 class Compartment():
 
 
-	def __init__(self, x_length, y_length, height, *args, **kwargs):
+	def __init__(self, x_length, y_length, height, name=None, *args, **kwargs):
+
+		self.name = name
 
 		self.x_length = x_length
 		self.y_length = y_length
@@ -74,6 +77,8 @@ class Compartment():
 	"""
 	def __repr__(self):
 		ret = "Compartment"
+		if self.name:
+			ret += " (%s)" % self.name
 		if self.level:
 			ret += "[%s]" % self.level
 		ret += " (%s x %s x %s)" % (self.x_length, self.y_length, self.height)

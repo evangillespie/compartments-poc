@@ -9,6 +9,7 @@ __author__ = "Evan Gillespie"
 
 from ..models.DividerCollectionModel import DividerCollectionModel
 from .DividerController import DividerController
+from .CompartmentController import CompartmentController
 
 
 class DividerCollectionController(object):
@@ -49,16 +50,24 @@ class DividerCollectionController(object):
 
 
 	"""
-	Add a compartment to the collection
-
-	:param collection: the DividerCollection that will contain the Compartment
-	:param compartment: the Compartment that we are adding to the DividerCollection
-
-	:return:
 	"""
 	@classmethod
-	def add_compartment_to_collection(cls, collection, compartment):
-		DividerCollectionModel.add_compartment_to_collection(collection, compartment)
+	def add_new_compartment_to_collection(cls, collection, x_length, y_length, 
+			bounding_div_names, height, level=None, offset=None, name=None):
+		if not name:
+			name = DividerCollectionModel.get_new_name(collection)
+
+		com = CompartmentController.create_new_compartment(
+			x_length=x_length,
+			y_length=y_length,
+			bounding_div_names=bounding_div_names,
+			height=height,
+			offset=offset,
+			level=level,
+			name=name)
+		DividerCollectionModel.add_compartment_to_collection(collection, com)
+
+		return com
 
 
 	"""

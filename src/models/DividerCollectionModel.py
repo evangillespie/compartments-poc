@@ -12,7 +12,7 @@ __author__ = "Evan Gillespie"
 import logging
 import random
 import string
-from ..config import GENERATED_DIVIDER_NAME_LENGTH
+from ..config import GENERATED_NAME_LENGTH
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +98,7 @@ class DividerCollectionModel(object):
 
 
 	"""
-	Return a new (unused) name for a Divider in the collection
+	Return a new (unused) name for a Divider or Compartment in the collection
 
 	:param collection:
 
@@ -111,10 +111,11 @@ class DividerCollectionModel(object):
 			choice = ''.join(
 							[
 								random.choice(string.ascii_uppercase) \
-									for _ in range(GENERATED_DIVIDER_NAME_LENGTH)
+									for _ in range(GENERATED_NAME_LENGTH)
 							]
 						)
 		return choice
+
 
 # -----------------------------------------------
 # ------------- Data Model Below ----------------
@@ -129,8 +130,7 @@ class DividerCollection():
 		self.dividers = []
 		self.compartments = []
 
-		self.names = []	#used names
-
+		self.names = []	#used divider or collection names
 
 	"""
 	Add a new divider to this collection
