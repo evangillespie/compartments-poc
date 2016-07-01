@@ -98,6 +98,40 @@ class DividerCollectionModel(object):
 
 
 	"""
+	Retreive a particular compartment by name
+
+	:param collection: the collection to get it from
+	:param name: name of the Compartment to get
+
+	:return: Divider in the collection with the name. None if no name found
+	"""
+	@classmethod
+	def get_compartment_with_name_from_collection(cls, collection, name):
+		for c in collection.compartments:
+			if c.name == name:
+				return c
+		return None
+
+
+	"""
+	return the parent of a given compartment
+
+	:param collection: collection to get the parent from
+	:param compartment: compartment to get the parent of
+
+	:return: Compartment which is the parent of compartment(argument). None if it has no parent
+	"""
+	@classmethod
+	def get_compartment_parent(cls, collection, compartment):
+		if compartment.name in collection.parents:
+			return cls.get_compartment_with_name_from_collection(
+				collection,collection.parents[compartment.name]
+			)
+		else:
+			return None
+
+
+	"""
 	register one compartment as the parent of another within a collection
 
 	:param collection: the collection in question

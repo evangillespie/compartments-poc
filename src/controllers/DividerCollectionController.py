@@ -114,3 +114,38 @@ class DividerCollectionController(object):
 	def get_divider_with_name_from_collection(cls, collection, name):
 		return DividerCollectionModel.get_divider_with_name_from_collection(collection, name)
 
+
+	"""
+	return the parent of a given compartment
+
+	:param collection: collection to get the parent from
+	:param compartment: compartment to get the parent of
+
+	:return: Compartment which is the parent of compartment(argument). None if it has no parent
+	"""
+	@classmethod
+	def get_compartment_parent(cls, collection, compartment):
+		return DividerCollectionModel.get_compartment_parent(collection, compartment)
+
+
+	"""
+	calculate the total offset for a compartment and all parents in this collection
+
+	:param collection: the collection
+	:param compartment: compartment to calculate the total offset of
+
+	:return: total offset of this compartment and all parents
+	"""
+	@classmethod
+	def get_compartment_total_offset(cls, collection, compartment):
+		
+		total_offset_x = compartment.offset[0]
+		total_offset_y = compartment.offset[1]
+
+		parent = cls.get_compartment_parent(collection, compartment)
+		while parent:
+			total_offset_x += parent.offset[0]
+			total_offset_y += parent.offset[1]
+			parent = cls.get_compartment_parent(collection, parent)
+
+		return (total_offset_x, total_offset_y)

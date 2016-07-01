@@ -123,7 +123,6 @@ class BuilderController(object):
 			if not offset:
 				offset = (0,0)
 
-
 			compartment = DividerCollectionController.add_new_compartment_to_collection(
 				collection = collection,
 				x_length=compartment_json['x_length'],
@@ -139,6 +138,7 @@ class BuilderController(object):
 			new_div_name = None
 			prev_div_name = None
 			new_bounding_div_names = None
+			offset = [0, 0]
 			for child_comp_index, child_comp_json in enumerate(compartment_json['compartments']):
 				prev_div_name = new_div_name
 				# only add a new divider to the end of the n-1 compartments
@@ -164,6 +164,16 @@ class BuilderController(object):
 
 					# @TODO: create the Divider joinery
 
+				#increment the offset
+				if child_comp_index > 0:
+					if compartment_json['div_orientation'] == 'x':
+						offset[1] += compartment_json['compartments'][child_comp_index-1]['y_length']
+						offset[1] += plan['thickness']
+					elif compartment_json['div_orientation'] == 'y':
+						offset[0] += compartment_json['compartments'][child_comp_index-1]['x_length']
+						offset[0] += plan['thickness']
+
+
 				# Update the bounding divider names for child compartments
 				new_bounding_div_names = cls.get_new_bounding_div_names(
 					parent_bounding_div_names=bounding_div_names,
@@ -174,12 +184,12 @@ class BuilderController(object):
 					num_comps=len(compartment_json['compartments'])
 				)
 
-				# @TODO: add compartment offset
 				recursively_interpret_compartment_plan(
 					child_comp_json,
 					new_bounding_div_names,
 					level=level+1,
-					parent_name=compartment.name
+					parent_name=compartment.name,
+					offset=tuple(offset)
 				)
 
 
