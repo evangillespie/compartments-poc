@@ -33,7 +33,7 @@ class DividerCollectionModel(object):
 		if 'id' in kwargs:
 			id = kwargs['id']
 		else:
-			id = "Sample"
+			id = "sample"
 
 		logger.debug("Creating new DividerCollection (%s)" % id)
 		return DividerCollection(id)

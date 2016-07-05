@@ -36,7 +36,7 @@ class DividerCollectionController(object):
 	:param y_length: y_length of the new divider
 	:param thickness: thickness of the new divider
 
-	:return: name of the divider
+	:return: new Divider object
 	"""
 	@classmethod
 	def add_rectangular_divider_to_collection(cls, collection, x_length, y_length, thickness, name=None, *args, **kwargs):
@@ -46,7 +46,7 @@ class DividerCollectionController(object):
 		div = DividerController.create_rectangular_divider(x_length, y_length, thickness, name)
 		DividerCollectionModel.add_divider_to_collection(collection, div)
 
-		return name
+		return div
 
 
 	"""
@@ -149,3 +149,25 @@ class DividerCollectionController(object):
 			parent = cls.get_compartment_parent(collection, parent)
 
 		return (total_offset_x, total_offset_y)
+
+
+	"""
+	add joinery to a divider and it's mate. Male joinery on the divider and female on
+		bounding dividers of the compartment
+
+	:param divider: Divider object to add male joinery to
+	:param div_orientation: orientation of the Divider in the overall plan
+	:param div_offset_in_comp: where does this Divider lie in the containing Compartment
+	:param containing_compartment: Compartment that the Divider lives inside of
+	:param width: the width of the joinery. For male how far it extends, for female how wide the slots are
+
+	:return:
+	"""
+	@classmethod
+	def add_joinery_to_divider(cls, divider, div_orientation, div_offset_in_comp, containing_compartment, width):
+		# add male joinery to left and right edges
+		DividerController.add_male_joinery_to_divider(divider, width)
+
+		# @TODO: add female joinery to the appropriate bounding divs at the appropriate offset
+
+		# @TODO: add joinery for the bottom

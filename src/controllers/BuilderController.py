@@ -11,7 +11,9 @@ import logging
 from ..config import OUTER_DIVIDER_NAME_BASE, OUTER_DIVIDER_NAME_LEFT, \
 	OUTER_DIVIDER_NAME_TOP, OUTER_DIVIDER_NAME_RIGHT, OUTER_DIVIDER_NAME_BOTTOM
 from CompartmentController import CompartmentController
+from DividerController import DividerController
 from DividerCollectionController import DividerCollectionController
+from DxfWriteController import DxfWriteController
 
 
 logger = logging.getLogger( __name__ )
@@ -40,6 +42,13 @@ class BuilderController(object):
 		cls.create_base_and_edge_dividers_from_plan(collection, plan)
 
 		cls.interpret_plan_into_compartments_and_dividers(plan, collection)
+
+		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
+			DxfWriteController.draw_layers_and_points_to_dxf(
+				DividerController.convert_divider_to_points(d),
+				d.name + ".dxf",
+				collection.id
+			)
 
 		print collection
 		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
@@ -155,14 +164,22 @@ class BuilderController(object):
 					else:
 						logger.error("Weird div_orientation in plan: %s" % compartment_json['div_orientation'])
 
-					new_div_name = DividerCollectionController.add_rectangular_divider_to_collection(
+					new_div = DividerCollectionController.add_rectangular_divider_to_collection(
 						collection=collection,
 						x_length=new_div_length,
 						y_length=div_height,
 						thickness=plan['thickness' ]
 					)
 
-					# @TODO: create the Divider joinery
+					# add joinery to new divider and 
+					DividerCollectionController.add_joinery_to_divider(
+						divider=new_div,
+						div_orientation=compartment_json['div_orientation'],
+						div_offset_in_comp=tuple(offset),
+						containing_compartment=compartment,
+						width=plan['thickness']
+					)
+
 
 				#increment the offset
 				if child_comp_index > 0:
@@ -173,12 +190,11 @@ class BuilderController(object):
 						offset[0] += compartment_json['compartments'][child_comp_index-1]['x_length']
 						offset[0] += plan['thickness']
 
-
 				# Update the bounding divider names for child compartments
 				new_bounding_div_names = cls.get_new_bounding_div_names(
 					parent_bounding_div_names=bounding_div_names,
 					orientation=compartment_json['div_orientation'],
-					new_div_name=new_div_name,
+					new_div_name=new_div.name,
 					prev_div_name=prev_div_name,
 					comp_index=child_comp_index,
 					num_comps=len(compartment_json['compartments'])

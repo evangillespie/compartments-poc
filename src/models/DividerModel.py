@@ -9,6 +9,7 @@
 __author__ = "Evan Gillespie"
 
 
+from ..config import JOINERY_TAB_HEIGHT_PROPORTION
 import logging
 
 
@@ -43,6 +44,105 @@ class DividerModel(object):
 		return div
 
 
+	"""
+	Add male joinery to the left and right edges of a divider
+
+	:param divider: the divider to add joinery to
+	:param width: how far do the male joints extend?
+
+	:return:
+	"""
+	@classmethod
+	def add_male_joinery_to_divider_sides(cls, divider, depth):
+		x_length = divider.x_length
+		y_length = divider.y_length
+		tab_h = y_length * JOINERY_TAB_HEIGHT_PROPORTION
+
+		left_join = {
+			'type': 'positive',
+			# points are sort of arbitrary
+			'points': [
+				(0, 0),
+				(-depth, 0),
+				(-depth, tab_h),
+				(0, tab_h),
+				(0, y_length - tab_h),
+				(-depth, y_length - tab_h),
+				(-depth, y_length),
+				(0, y_length)
+			]
+		}
+
+		right_join = {
+			'type': 'positive',
+			'points': [
+				(x_length, y_length),
+				(x_length + depth, y_length),
+				(x_length + depth, y_length - tab_h),
+				(x_length, y_length - tab_h),
+				(x_length, tab_h),
+				(x_length + depth, tab_h),
+				(x_length + depth, 0),
+				(x_length, 0)
+			]
+		}
+
+		divider.joinery.append(left_join)
+		divider.joinery.append(right_join)
+
+
+	"""
+	Return a dict of layers of points that represents the divider with all joinery
+
+	:param divider: the divider to export as points
+	
+	:return: Dictionary where each value is a list of points making up a layer
+			{
+				'outline': [(0, 0), (0, 10), ...],
+				'1': [(1, 3), (1, 5), ...]
+			}
+	"""
+	@classmethod
+	def convert_divider_to_points(cls, divider):
+		
+		# @TODO: include the negative joinery
+		
+		ret = {}
+		
+		outline = divider.points
+		for j in divider.joinery:
+			if j['type'] == 'positive':
+				outline = cls.update_divider_points_with_positive_joinery(
+					outline,
+					j['points']
+				)
+
+		ret['outline'] = outline
+		return ret
+
+
+	"""
+	Update a set of outline points to include a set of joinery points
+
+	:param divider_points: the original list of divider points
+	:param joinery_points: joinery points to add somewhere
+
+	:return: new set of divider points
+	"""
+	@classmethod
+	def update_divider_points_with_positive_joinery(cls, divider_points, joinery_points):
+		start = joinery_points[0]
+		end = joinery_points[-1]
+
+		for i in range(len(divider_points)):
+			if start == divider_points[i]:
+				for j in range(i, len(divider_points)):
+					if end == divider_points[j]:
+						return divider_points[:i] + joinery_points + divider_points[j+1:]
+
+		return divider_points
+
+
 # -----------------------------------------------
 # ------------- Data Model Below ----------------
 # -----------------------------------------------
@@ -56,6 +156,7 @@ class Divider():
 		self.x_length = x_length
 		self.y_length = y_length
 		self.thickness = thickness
+		self.points = [(0, 0), (0, y_length), (x_length, y_length), (x_length, 0)]
 
 		# a list of joinery elements to be added or subtracted from the base rectangle
 		self.joinery = []

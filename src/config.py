@@ -25,3 +25,7 @@ GENERATED_NAME_LENGTH = 5
 
 # Where are output dxf files stored?
 DXF_DEST_DIR = join(dirname(dirname(__file__)), "dxf_files")
+
+
+# PROPORTIONAL HEIGHT OF JOINERY TABS
+JOINERY_TAB_HEIGHT_PROPORTION = 0.2
