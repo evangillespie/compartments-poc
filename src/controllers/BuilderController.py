@@ -43,13 +43,7 @@ class BuilderController(object):
 
 		cls.interpret_plan_into_compartments_and_dividers(plan, collection)
 
-		DxfWriteController.create_empty_dxf_directory(collection.id)
-		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
-			DxfWriteController.draw_layers_and_points_to_dxf(
-				DividerController.convert_divider_to_points(d),
-				d.name + ".dxf",
-				collection.id
-			)
+		cls.write_collection_dividers_to_dxf(collection)
 
 		print collection
 		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
@@ -287,3 +281,21 @@ class BuilderController(object):
 						parent_bounding_div_names[2],
 						parent_bounding_div_names[3]
 					)
+
+
+	"""
+	Turn the Dividers in a DividerCollection in to a bunch of DXF files
+
+	:param collection: the collection to turn into DXFs
+
+	:return:
+	"""
+	@classmethod
+	def write_collection_dividers_to_dxf(cls, collection):
+		DxfWriteController.create_empty_dxf_directory(collection.id)
+		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
+			DxfWriteController.draw_layers_and_points_to_dxf(
+				DividerController.convert_divider_to_points(d),
+				d.name + ".dxf",
+				collection.id
+			)
