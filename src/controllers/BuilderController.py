@@ -43,6 +43,7 @@ class BuilderController(object):
 
 		cls.interpret_plan_into_compartments_and_dividers(plan, collection)
 
+		DxfWriteController.create_empty_dxf_directory(collection.id)
 		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
 			DxfWriteController.draw_layers_and_points_to_dxf(
 				DividerController.convert_divider_to_points(d),

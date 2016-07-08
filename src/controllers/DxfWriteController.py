@@ -9,7 +9,7 @@ __author__ = "Evan Gillespie"
 
 import logging
 import ezdxf
-from os.path import join
+import os
 from DividerController import DividerController
 from ..config import DXF_DEST_DIR
 
@@ -37,9 +37,9 @@ class DxfWriteController(object):
 	@classmethod
 	def draw_layers_and_points_to_dxf(cls, layers, filename, folder_name):
 
-		# @TODO: Create the folder or empty the folder if it exits.
+		filepath = os.path.join(DXF_DEST_DIR, folder_name, filename)
 
-		filepath = join(DXF_DEST_DIR, folder_name, filename)
+		# @TODO: Create the folder or empty the folder if it exits.
 
 		dwg = ezdxf.new('R2010')
 		msp = dwg.modelspace()
@@ -69,3 +69,22 @@ class DxfWriteController(object):
 	def add_layer_to_drawing(cls, drawing, modelspace, name, points):
 		drawing.layers.new(name=name)
 		modelspace.add_lwpolyline(points + [points[0]], dxfattribs={'layer': name})
+
+
+	"""
+	Prepare for writing dxf files for a collection by creating a names directory and making sure it's empty
+
+	:param folder_name: name of th efolder ot create and empty
+
+	:return:
+	"""
+	@classmethod
+	def create_empty_dxf_directory(cls, folder_name):
+		folderpath = os.path.join(DXF_DEST_DIR, folder_name)
+		
+		if os.path.isdir(folderpath):
+			for fi in os.listdir(folderpath):
+				if os.path.splitext(fi)[1] == '.dxf':
+					os.remove(os.path.join(folderpath, fi))
+		else:
+			os.mkdir(folderpath)
