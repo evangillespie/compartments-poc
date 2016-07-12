@@ -165,6 +165,7 @@ class BuilderController(object):
 						y_length=div_height,
 						thickness=plan['thickness' ]
 					)
+					new_div_name = new_div.name
 
 					# add joinery to new divider 
 					div_offset = offset
@@ -196,7 +197,7 @@ class BuilderController(object):
 				new_bounding_div_names = cls.get_new_bounding_div_names(
 					parent_bounding_div_names=bounding_div_names,
 					orientation=compartment_json['div_orientation'],
-					new_div_name=new_div.name,
+					new_div_name=new_div_name,
 					prev_div_name=prev_div_name,
 					comp_index=child_comp_index,
 					num_comps=len(compartment_json['compartments'])
