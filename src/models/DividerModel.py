@@ -9,7 +9,7 @@
 __author__ = "Evan Gillespie"
 
 
-from ..config import JOINERY_TAB_HEIGHT_PROPORTION
+from ..config import JOINERY_TAB_HEIGHT_PROPORTION, JOINERY_TAB_OFFSET_FROM_EDGE
 import logging
 
 
@@ -63,12 +63,14 @@ class DividerModel(object):
 			# points are sort of arbitrary
 			'points': [
 				(0, 0),
-				(-depth, 0),
-				(-depth, tab_h),
-				(0, tab_h),
-				(0, y_length - tab_h),
-				(-depth, y_length - tab_h),
-				(-depth, y_length),
+				(0, JOINERY_TAB_OFFSET_FROM_EDGE),
+				(-depth, JOINERY_TAB_OFFSET_FROM_EDGE),
+				(-depth, tab_h + JOINERY_TAB_OFFSET_FROM_EDGE),
+				(0, tab_h + JOINERY_TAB_OFFSET_FROM_EDGE),
+				(0, y_length - tab_h - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(-depth, y_length - tab_h - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(-depth, y_length - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(0, y_length - JOINERY_TAB_OFFSET_FROM_EDGE),
 				(0, y_length)
 			]
 		}
@@ -77,12 +79,14 @@ class DividerModel(object):
 			'type': 'positive',
 			'points': [
 				(x_length, y_length),
-				(x_length + depth, y_length),
-				(x_length + depth, y_length - tab_h),
-				(x_length, y_length - tab_h),
-				(x_length, tab_h),
-				(x_length + depth, tab_h),
-				(x_length + depth, 0),
+				(x_length, y_length - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(x_length + depth, y_length - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(x_length + depth, y_length - tab_h - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(x_length, y_length - tab_h - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(x_length, tab_h + JOINERY_TAB_OFFSET_FROM_EDGE),
+				(x_length + depth, tab_h + JOINERY_TAB_OFFSET_FROM_EDGE),
+				(x_length + depth, JOINERY_TAB_OFFSET_FROM_EDGE),
+				(x_length, JOINERY_TAB_OFFSET_FROM_EDGE),
 				(x_length, 0)
 			]
 		}
@@ -107,19 +111,19 @@ class DividerModel(object):
 		joint1 = {
 			'type': 'negative',
 			'points': [
-				(offset, 0),
-				(offset, tab_h),
-				(offset + width, tab_h),
-				(offset + width, 0)
+				(offset, 0 + JOINERY_TAB_OFFSET_FROM_EDGE),
+				(offset, tab_h + JOINERY_TAB_OFFSET_FROM_EDGE),
+				(offset + width, tab_h + JOINERY_TAB_OFFSET_FROM_EDGE),
+				(offset + width, 0 + JOINERY_TAB_OFFSET_FROM_EDGE)
 			]
 		}
 		joint2 = {
 			'type': 'negative',
 			'points': [
-				(offset, y_length - tab_h),
-				(offset, y_length),
-				(offset + width, y_length),
-				(offset + width, y_length - tab_h)
+				(offset, y_length - tab_h - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(offset, y_length - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(offset + width, y_length - JOINERY_TAB_OFFSET_FROM_EDGE),
+				(offset + width, y_length - tab_h - JOINERY_TAB_OFFSET_FROM_EDGE)
 			]
 		}
 
