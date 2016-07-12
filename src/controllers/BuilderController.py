@@ -166,11 +166,18 @@ class BuilderController(object):
 						thickness=plan['thickness' ]
 					)
 
-					# add joinery to new divider and 
+					# add joinery to new divider 
+					div_offset = offset
+					if compartment_json['div_orientation'] == 'x':
+						div_offset[1] += compartment_json['compartments'][child_comp_index-1]['y_length']
+					else:
+						div_offset[0] += compartment_json['compartments'][child_comp_index-1]['x_length']
+
 					DividerCollectionController.add_joinery_to_divider(
+						collection=collection,
 						divider=new_div,
 						div_orientation=compartment_json['div_orientation'],
-						div_offset_in_comp=tuple(offset),
+						div_offset_in_comp=tuple(div_offset),
 						containing_compartment=compartment,
 						width=plan['thickness']
 					)

@@ -39,16 +39,13 @@ class DxfWriteController(object):
 
 		filepath = os.path.join(DXF_DEST_DIR, folder_name, filename)
 
-		# @TODO: Create the folder or empty the folder if it exits.
-
 		dwg = ezdxf.new('R2010')
 		msp = dwg.modelspace()
 
 		cls.add_layer_to_drawing(dwg, msp, 'outline', layers['outline'])
 
-		for layer_name, points in layers.iteritems():
-			if layer_name != 'outline':
-				cls.add_layer_to_drawing(dwg, msp, layer_name, layer_points)
+		for c in layers['cuts']:
+			cls.add_layer_to_drawing(dwg, msp, 'cuts', c)
 
 		dwg.saveas(filepath)
 
@@ -67,7 +64,11 @@ class DxfWriteController(object):
 	"""
 	@classmethod
 	def add_layer_to_drawing(cls, drawing, modelspace, name, points):
-		drawing.layers.new(name=name)
+		try:
+			drawing.layers.get(name)
+		except ValueError:
+			drawing.layers.new(name=name)
+
 		modelspace.add_lwpolyline(points + [points[0]], dxfattribs={'layer': name})
 
 

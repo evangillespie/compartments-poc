@@ -45,6 +45,20 @@ class DividerController(object):
 
 
 	"""
+	Add female joinery to a divider, starting at a certain distance from the edge
+
+	:param divider: the divider to add female joinery to
+	:param offset: distance from the edge of the divider to the start of the female joint (socket)
+	:param width: width of the female joint (socket)
+
+	:return:
+	"""
+	@classmethod
+	def add_female_joinery_to_divider(cls, divider, offset, width):
+		DividerModel.add_female_joinery_to_divider(divider, offset, width)
+
+
+	"""
 	Return a dict of layers of points that represents the divider with all joinery
 
 	:param divider: the divider to export as points

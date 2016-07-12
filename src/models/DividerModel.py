@@ -92,6 +92,42 @@ class DividerModel(object):
 
 
 	"""
+	Add female joinery to a divider, starting at a certain distance from the edge
+
+	:param divider: the divider to add female joinery to
+	:param offset: distance from the edge of the divider to the start of the female joint (socket)
+	:param width: width of the female joint (socket)
+
+	:return:
+	"""
+	@classmethod
+	def add_female_joinery_to_divider(cls, divider, offset, width):
+		y_length = divider.y_length
+		tab_h = y_length * JOINERY_TAB_HEIGHT_PROPORTION
+		joint1 = {
+			'type': 'negative',
+			'points': [
+				(offset, 0),
+				(offset, tab_h),
+				(offset + width, tab_h),
+				(offset + width, 0)
+			]
+		}
+		joint2 = {
+			'type': 'negative',
+			'points': [
+				(offset, y_length - tab_h),
+				(offset, y_length),
+				(offset + width, y_length),
+				(offset + width, y_length - tab_h)
+			]
+		}
+
+		divider.joinery.append(joint1)
+		divider.joinery.append(joint2)
+
+
+	"""
 	Return a dict of layers of points that represents the divider with all joinery
 
 	:param divider: the divider to export as points
@@ -104,10 +140,10 @@ class DividerModel(object):
 	"""
 	@classmethod
 	def convert_divider_to_points(cls, divider):
-		
-		# @TODO: include the negative joinery
-		
-		ret = {}
+		ret = {
+			'cuts': [],
+			'outline': None
+		}
 		
 		outline = divider.points
 		for j in divider.joinery:
@@ -116,6 +152,9 @@ class DividerModel(object):
 					outline,
 					j['points']
 				)
+
+			elif j['type'] == 'negative':
+				ret['cuts'].append(j['points'])
 
 		ret['outline'] = outline
 		return ret

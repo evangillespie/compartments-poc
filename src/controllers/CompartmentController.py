@@ -47,3 +47,16 @@ class CompartmentController(object):
 			level=level,
 			name=name
 		)
+
+
+	"""
+	get bounding div name for a particular compartment on a particular side
+
+	:param compartment: the compartment to look at the bounding div name of
+	:param edge_name: 'left', 'top', 'right' or 'bottom' method will return the appropriate div name
+
+	:return: name of the divider on the appropriate side of the compartment
+	"""
+	@classmethod
+	def get_bounding_div_name_for_compartment_on_side(cls, compartment, edge_name):
+		return CompartmentModel.get_bounding_div_name_for_compartment_on_side(compartment, edge_name)

@@ -7,9 +7,13 @@
 __author__ = "Evan Gillespie"
 
 
+import logging
 from ..models.DividerCollectionModel import DividerCollectionModel
 from .DividerController import DividerController
 from .CompartmentController import CompartmentController
+
+
+logger = logging.getLogger(__name__)
 
 
 class DividerCollectionController(object):
@@ -152,9 +156,43 @@ class DividerCollectionController(object):
 
 
 	"""
+	get total offset for a compartment along one divider edge
+	ie. If a compartment is is the middle of the overall structure but joined to the left outside
+		edge on one side and a partway inner edge on the right side, those have different offsets
+
+	:param collection: the collection to look within
+	:param compartment: the compartment to calculate offset of
+	:param ref_edge: 'left', 'top', 'right' or 'bottom'
+
+	:return: the total compartment offset along the desired edge
+	"""
+	@classmethod
+	def get_compartment_total_offset_along_edge(cls, collection, compartment, ref_edge):
+
+		edge_div_name = CompartmentController.get_bounding_div_name_for_compartment_on_side(compartment, ref_edge)
+
+		if ref_edge == 'left' or ref_edge == 'right':
+			offset_ind = 0
+		else:
+			offset_ind = 1
+
+		offset_along_edge = compartment.offset[offset_ind]
+
+		parent = cls.get_compartment_parent(collection, compartment)
+		while parent:
+			parent_edge_div_name = CompartmentController.get_bounding_div_name_for_compartment_on_side(parent, ref_edge)
+			if parent_edge_div_name == edge_div_name:
+				offset_along_edge += parent.offset[offset_ind]
+			parent = cls.get_compartment_parent(collection, parent)
+
+		return offset_along_edge
+
+
+	"""
 	add joinery to a divider and it's mate. Male joinery on the divider and female on
 		bounding dividers of the compartment
 
+	:param collection: the DividerCollection that these dividers and compartments live in
 	:param divider: Divider object to add male joinery to
 	:param div_orientation: orientation of the Divider in the overall plan
 	:param div_offset_in_comp: where does this Divider lie in the containing Compartment
@@ -164,10 +202,26 @@ class DividerCollectionController(object):
 	:return:
 	"""
 	@classmethod
-	def add_joinery_to_divider(cls, divider, div_orientation, div_offset_in_comp, containing_compartment, width):
+	def add_joinery_to_divider(cls, collection, divider, div_orientation, div_offset_in_comp, containing_compartment, width):
+
 		# add male joinery to left and right edges
 		DividerController.add_male_joinery_to_divider(divider, width)
 
-		# @TODO: add female joinery to the appropriate bounding divs at the appropriate offset
+		# add female joinery to the bounding dividers
+		if div_orientation == 'x':
+			female_edges = ['left', 'right']
+			fem_offset = div_offset_in_comp[1]
+		else:
+			female_edges = ['top', 'bottom']
+			fem_offset = div_offset_in_comp[0]
+
+		for edge_name in female_edges:
+			fem_offset += cls.get_compartment_total_offset_along_edge(collection, containing_compartment, edge_name)
+			edge_div = cls.get_divider_with_name_from_collection(
+				collection, 
+				CompartmentController.get_bounding_div_name_for_compartment_on_side(containing_compartment, edge_name)
+			)
+			DividerController.add_female_joinery_to_divider(edge_div, fem_offset, divider.thickness)
+
 
 		# @TODO: add joinery for the bottom
