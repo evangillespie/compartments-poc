@@ -172,9 +172,9 @@ class DividerCollectionController(object):
 		edge_div_name = CompartmentController.get_bounding_div_name_for_compartment_on_side(compartment, ref_edge)
 
 		if ref_edge == 'left' or ref_edge == 'right':
-			offset_ind = 0
-		else:
 			offset_ind = 1
+		else:
+			offset_ind = 0
 
 		offset_along_edge = compartment.offset[offset_ind]
 
@@ -216,12 +216,12 @@ class DividerCollectionController(object):
 			fem_offset = div_offset_in_comp[0]
 
 		for edge_name in female_edges:
-			fem_offset += cls.get_compartment_total_offset_along_edge(collection, containing_compartment, edge_name)
+			com_offset = cls.get_compartment_total_offset_along_edge(collection, containing_compartment, edge_name)
 			edge_div = cls.get_divider_with_name_from_collection(
 				collection, 
 				CompartmentController.get_bounding_div_name_for_compartment_on_side(containing_compartment, edge_name)
 			)
-			DividerController.add_female_joinery_to_divider(edge_div, fem_offset, divider.thickness)
+			DividerController.add_female_joinery_to_divider(edge_div, fem_offset + com_offset, divider.thickness)
 
 
 		# @TODO: add joinery for the bottom
