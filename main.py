@@ -26,7 +26,7 @@ def draw_dxf_from_sample_plan():
 		level=logging.DEBUG,
 	)
 
-	# plan = OrganizerPlanController.get_sample_plan()
-	plan = OrganizerPlanController.get_simple_sample_plan()
+	plan = OrganizerPlanController.get_sample_plan()
+	# plan = OrganizerPlanController.get_simple_sample_plan()
 	
 	BuilderController.build_divider_collection_from_plan(plan)

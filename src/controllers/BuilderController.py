@@ -123,7 +123,7 @@ class BuilderController(object):
 		"""
 		def recursively_interpret_compartment_plan(compartment_json, bounding_div_names, 
 				level=1, offset=None, parent_name=None):
-			
+
 			if not offset:
 				offset = (0,0)
 
@@ -139,16 +139,19 @@ class BuilderController(object):
 			)
 
 			child_comp_index = 0
-			new_div_name = None
+			new_div = None
 			prev_div_name = None
 			new_bounding_div_names = None
-			offset = [0, 0]
+			running_offset = [0, 0]
+
 			for child_comp_index, child_comp_json in enumerate(compartment_json['compartments']):
-				prev_div_name = new_div_name
+
+				if new_div:
+					prev_div_name = new_div.name
+				# read through the child compartments and put a divider after each one.
 				# only add a new divider to the end of the n-1 compartments
 				# the nth compartment is already bounded by the time you reach it 
 				if child_comp_index < len(compartment_json['compartments']) - 1:
-					# read through the child compartments and put a divider after each one.
 					# x direction is read rightward and y is read upward.
 					if compartment_json['div_orientation'] == 'x':
 						new_div_length = compartment_json['compartments'][child_comp_index]['x_length']
@@ -165,10 +168,10 @@ class BuilderController(object):
 						y_length=div_height,
 						thickness=plan['thickness' ]
 					)
-					new_div_name = new_div.name
+
 
 					# add joinery to new divider 
-					div_offset = offset
+					div_offset = list(running_offset)	# need to use the list() constructor to make a duplicate, not just a ref
 					if compartment_json['div_orientation'] == 'x':
 						div_offset[1] += compartment_json['compartments'][child_comp_index-1]['y_length']
 					else:
@@ -183,21 +186,20 @@ class BuilderController(object):
 						width=plan['thickness']
 					)
 
-
-				#increment the offset
+				# increment the running_offset
 				if child_comp_index > 0:
 					if compartment_json['div_orientation'] == 'x':
-						offset[1] += compartment_json['compartments'][child_comp_index-1]['y_length']
-						offset[1] += plan['thickness']
+						running_offset[1] += compartment_json['compartments'][child_comp_index-1]['y_length']
+						running_offset[1] += plan['thickness']
 					elif compartment_json['div_orientation'] == 'y':
-						offset[0] += compartment_json['compartments'][child_comp_index-1]['x_length']
-						offset[0] += plan['thickness']
+						running_offset[0] += compartment_json['compartments'][child_comp_index-1]['x_length']
+						running_offset[0] += plan['thickness']
 
 				# Update the bounding divider names for child compartments
 				new_bounding_div_names = cls.get_new_bounding_div_names(
 					parent_bounding_div_names=bounding_div_names,
 					orientation=compartment_json['div_orientation'],
-					new_div_name=new_div_name,
+					new_div_name=new_div.name,
 					prev_div_name=prev_div_name,
 					comp_index=child_comp_index,
 					num_comps=len(compartment_json['compartments'])
@@ -208,7 +210,7 @@ class BuilderController(object):
 					new_bounding_div_names,
 					level=level+1,
 					parent_name=compartment.name,
-					offset=tuple(offset)
+					offset=tuple(running_offset)
 				)
 
 
