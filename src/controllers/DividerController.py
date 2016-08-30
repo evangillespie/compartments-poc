@@ -45,6 +45,35 @@ class DividerController(object):
 
 
 	"""
+	Add male joinery to the bottom of the divider. For connecting vertical bits to the base
+
+	:param divider: the divider to add jonery to
+	:param depth: how deep into the base will the pieces go?
+
+	:return:
+	"""
+	@classmethod
+	def add_base_joinery_to_vertical_divider(cls, divider, depth=None):
+		DividerModel.add_base_joinery_to_vertical_divider(divider, depth)
+
+
+	"""
+	Add female joinery to the base that will connect with the vertical dividers
+
+	:param base_divider: the base Divider object
+	:param x_length: length of the joint in the x direction
+	:param y_length: length of the joint in the y direction
+	:param offsets: (x,y) tuple of offsets to the lower left corner of the joint
+	:param depth: how deep does this joinery go?
+
+	:return:
+	"""
+	@classmethod
+	def add_female_joinery_to_base(cls, base_divider, x_length, y_length, offsets, depth=None):
+		DividerModel.add_female_joinery_to_base(base_divider, x_length, y_length, offsets)
+
+
+	"""
 	Add female joinery to a divider, starting at a certain distance from the edge
 
 	:param divider: the divider to add female joinery to

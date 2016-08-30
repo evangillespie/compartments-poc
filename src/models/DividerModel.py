@@ -9,7 +9,7 @@
 __author__ = "Evan Gillespie"
 
 
-from ..config import JOINERY_TAB_HEIGHT_PROPORTION, JOINERY_TAB_OFFSET_FROM_EDGE
+from ..config import JOINERY_TAB_HEIGHT_PROPORTION, JOINERY_TAB_OFFSET_FROM_EDGE, JOINERY_BASE_DEPTH
 import logging
 
 
@@ -96,6 +96,67 @@ class DividerModel(object):
 
 
 	"""
+	Add male joinery to the bottom of the divider. For connecting vertical bits to the base
+
+	:param divider: the divider to add jonery to
+	:param depth: how deep into the base will the pieces go?
+
+	:return:
+	"""
+	@classmethod
+	def add_base_joinery_to_vertical_divider(cls, divider, depth=None):
+		if not depth:
+			depth = JOINERY_BASE_DEPTH
+
+		x_length = divider.x_length
+
+		divider.joinery.append(
+			{
+				'type': 'positive',
+				'points': [
+					(0, -depth),
+					(0, 0),
+					(x_length, 0),
+					(x_length, -depth)	
+				]
+			}
+		)
+
+
+	"""
+	Add female joinery to the base that will connect with the vertical dividers
+
+	:param base_divider: the base Divider object
+	:param x_length: length of the joint in the x direction
+	:param y_length: length of the joint in the y direction
+	:param offsets: (x,y) tuple of offsets to the lower left corner of the joint
+	:param depth: how deep does this joinery go?
+
+	:return:
+	"""
+	@classmethod
+	def add_female_joinery_to_base(cls, base_divider, x_length, y_length, offsets, depth=None):
+		if not depth:
+			depth = JOINERY_BASE_DEPTH
+
+		x_offset = offsets[0]
+		y_offset = offsets[1]
+
+		base_divider.joinery.append(
+			{
+				'type': 'negative',
+				'depth': depth,
+				'points': [
+					(x_offset, y_offset),
+					(x_offset, y_offset + y_length),
+					(x_offset + x_length, y_offset + y_length),
+					(x_offset + x_length, y_offset)
+				]
+			}
+		)
+
+
+	"""
 	Add female joinery to a divider, starting at a certain distance from the edge
 
 	:param divider: the divider to add female joinery to
@@ -174,16 +235,64 @@ class DividerModel(object):
 	"""
 	@classmethod
 	def update_divider_points_with_positive_joinery(cls, divider_points, joinery_points):
-		start = joinery_points[0]
-		end = joinery_points[-1]
+		# turn the two lists of points into two lists of lines
+		divider_lines = []
+		joinery_lines = []
+		last_point = divider_points[-1]
+		for point in divider_points:
+			divider_lines.append((last_point, point))
+			last_point = point
+		last_point = joinery_points[-1]
+		for point in joinery_points:
+			joinery_lines.append((last_point, point))
+			last_point = point
 
-		for i in range(len(divider_points)):
-			if start == divider_points[i]:
-				for j in range(i, len(divider_points)):
-					if end == divider_points[j]:
-						return divider_points[:i] + joinery_points + divider_points[j+1:]
+		# find matching lines
+		overlapping_line = None
+		reverse_joinery = False
+		for line_d in divider_lines:
+			for line_j in joinery_lines:
+				if line_j == line_d or line_j == line_d[::-1]:
+					overlapping_line = line_d
+					if line_j == line_d:
+						reverse_joinery = True
+					break
+			if overlapping_line:
+				break
 
-		return divider_points
+		joinery_lines = cls.reorder_list_of_lines_and_remove(joinery_lines, overlapping_line, reverse_joinery)
+
+		# buid a new, joined set of lines
+		lines = []
+		for i in divider_lines:
+			if i == overlapping_line:
+				for j in joinery_lines:
+					lines.append(j)
+			else:
+				lines.append(i)
+
+		# reconstruct a list of points
+
+		return [l[0] for l in lines]
+
+
+	"""
+	rearrange a list of lines to start with a different line and possible reverse the direction
+	also remove the one matching line
+
+	:param lines: the original list of lines
+	:param start_after_inverse: start after the reversed version of this line. too complex?
+	:param reverse_order: (boolean) reverse the direction of lines in the list if True
+
+	:return: new list of lines
+	"""
+	@classmethod
+	def reorder_list_of_lines_and_remove(cls, lines, start_after_inverse, reverse_order):
+		if reverse_order:
+			lines = [(l[1], l[0]) for l in  lines[::-1]]
+
+		start_after_index = lines.index(start_after_inverse[::-1])
+		return lines[start_after_index+1:] + lines[:start_after_index]
 
 
 # -----------------------------------------------
