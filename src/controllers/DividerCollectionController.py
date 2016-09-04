@@ -11,6 +11,7 @@ import logging
 from ..models.DividerCollectionModel import DividerCollectionModel
 from .DividerController import DividerController
 from .CompartmentController import CompartmentController
+from ..config import OUTER_DIVIDER_NAME_BASE
 
 
 logger = logging.getLogger(__name__)
@@ -211,9 +212,13 @@ class DividerCollectionController(object):
 		if div_orientation == 'x':
 			female_edges = ['left', 'right']
 			fem_offset = div_offset_in_comp[1]
+			base_fem_x_length = divider.x_length # x length of the divider is how long it is
+			base_fem_y_length = divider.thickness
 		else:
 			female_edges = ['top', 'bottom']
 			fem_offset = div_offset_in_comp[0]
+			base_fem_y_length = divider.x_length
+			base_fem_x_length = divider.thickness
 
 		for edge_name in female_edges:
 			com_offset = cls.get_compartment_total_offset_along_edge(collection, containing_compartment, edge_name)
@@ -223,5 +228,21 @@ class DividerCollectionController(object):
 			)
 			DividerController.add_female_joinery_to_divider(edge_div, fem_offset + com_offset, divider.thickness)
 
+		containing_offset = cls.get_compartment_total_offset(collection, containing_compartment)
 
-		# @TODO: add joinery for the bottom
+		# Add male joinery for the base
+		DividerController.add_base_joinery_to_vertical_divider(divider)
+
+		# Add female joinery to the base		
+		base_fem_join_offset = (
+			div_offset_in_comp[0] + containing_offset[0] + divider.thickness,
+			div_offset_in_comp[1] + containing_offset[1],
+		)
+		# @HACK: thickness added to the first argument to compensate for the starting 0,6) offset
+
+		DividerController.add_female_joinery_to_base(
+			cls.get_divider_with_name_from_collection(collection, OUTER_DIVIDER_NAME_BASE),
+			base_fem_x_length,
+			base_fem_y_length,
+			base_fem_join_offset
+		)

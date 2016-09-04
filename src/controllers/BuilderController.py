@@ -264,6 +264,7 @@ class BuilderController(object):
 				OUTER_DIVIDER_NAME_RIGHT,
 				OUTER_DIVIDER_NAME_BOTTOM
 			),
+			# @HACK: offsets start non-zero to account for overlap in the outside edges
 			offset=(0, plan['thickness'])
 		)
 
