@@ -8,6 +8,14 @@
 __author__ = "Evan Gillespie"
 
 
+import sys
+import logging
+from importlib import import_module
+
+
+logger = logging.getLogger(__name__)
+
+
 class OrganizerPlanModel(object):
 
 
@@ -20,142 +28,18 @@ class OrganizerPlanModel(object):
 
 	The real plans won't exist until there is a way for the user to create them
 	Eventually, the plan model should get a lot more rubust than this dictionary
+
+	:param plan_number: which plan should I return? they're numbered in the order they were created
+
+	:return: json object containing all the data for a set of compartments
 	"""
 	@classmethod
-	def get_sample_plan(cls):
-		'''
-		_________________
-		|				|
-		|				|
-		|				|
-		|				|
-		|_______________|
-		|		|		|
-		|_______|		|
-		|		|		|
-		|_______|		|
-		|_______|_______|
-		'''
+	def get_sample_plan(cls, plan_number):
 
-		return {
-			'x_length': 120,
-			'y_length': 200,
-			'height': 50,
-			'thickness': 6,	# Total heigth, including the base
-			'compartments': [
-				{
-					'level': 1,	# useful for debugging
-					#  y means that interior dividers are parallel to the y axis.
-					'div_orientation': 'x',
-					'x_length': 108,
-					'y_length': 188,
-					'compartments': [
-						{
-							'level': 2,
-							'div_orientation': 'y',
-							'x_length': 108,
-							'y_length': 91,
-							'compartments': [
-								{
-									'level': 3,
-									'div_orientation': 'x',
-									'x_length': 51,
-									'y_length': 91,
-									'compartments': [
-										{
-											'level': 4,
-											'div_orientation': None,
-											'x_length': 51,
-											'y_length': 43,
-											'compartments': []
-										},
-										{
-											'level': 4,
-											'div_orientation': None,
-											'x_length': 51,
-											'y_length': 18,
-											'compartments': []
-										},
-										{
-											'level': 4,
-											'div_orientation': None,
-											'x_length': 51,
-											'y_length': 18,
-											'compartments': []
-										}
-									]
-								},
-								{
-									'level': 3,
-									'div_orientation': None,
-									'x_length': 51,
-									'y_length': 91,
-									'compartments': []
-								}
-							]
-						},
-						{
-							'level': 2,
-							'div_orientation': None,
-							'x_length': 108,
-							'y_length': 91,
-							'compartments': []
-						}
-					]
-
-				}
-			]
-		}
-
-
-	"""
-	Return a simpler version of the sample plan for debugging
-	"""
-	@classmethod
-	def get_simple_sample_plan(cls):
-		'''
-		_________________
-		|				|
-		|				|
-		|				|
-		|				|
-		|_______________|
-		|				|
-		|		 		|
-		|		 		|
-		|		 		|
-		|_______________|
-		'''
-
-		return {
-			'x_length': 120,
-			'y_length': 200,
-			'height': 50,
-			'thickness': 6,	# Total heigth, including the base
-			'compartments': [
-				{
-					'level': 1,	# useful for debugging
-					#  y means that interior dividers are parallel to the y axis.
-					'div_orientation': 'x',
-					'x_length': 108,
-					'y_length': 188,
-					'compartments': [
-						{
-							'level': 2,
-							'div_orientation': 'y',
-							'x_length': 108,
-							'y_length': 91,
-							'compartments': []
-						},
-						{
-							'level': 2,
-							'div_orientation': None,
-							'x_length': 108,
-							'y_length': 91,
-							'compartments': []
-						}
-					]
-
-				}
-			]
-		}
+		try:
+			sample_plan = import_module("src.sample_plans.sample_plan_" + str(plan_number))
+			return sample_plan.plan
+		except:
+			print "ERROR. See log"
+			logger.error("Can't import plan %s" % plan_number)
+			sys.exit()
