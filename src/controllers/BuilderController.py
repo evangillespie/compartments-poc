@@ -155,16 +155,19 @@ class BuilderController(object):
 	@classmethod
 	def interpret_plan_into_compartments_and_dividers(cls, plan, collection):
 		
+		# height of the dividers is overall height - height of the base
 		div_height = plan['height'] - plan['thickness']
 
 
 		"""
 		Create a compartment object and any dividers inside of it,
-		then call recursively for any compartments inside
+		then call recursively for any compartments inside.
+		Put those objects into the collection
 		"""
 		def recursively_interpret_compartment_plan(compartment_json, bounding_div_names, 
 				level=1, offset=None, parent_name=None):
 
+			# (0,0) is the bottom left corner
 			if not offset:
 				offset = (0,0)
 
@@ -348,6 +351,6 @@ class BuilderController(object):
 		for d in DividerCollectionController.get_all_dividers_in_collection(collection):
 			DxfWriteController.draw_layers_and_points_to_dxf(
 				DividerController.convert_divider_to_points(d),
-				d.name + ".dxf",
+				str(d.name)	 + ".dxf",
 				collection.id
 			)

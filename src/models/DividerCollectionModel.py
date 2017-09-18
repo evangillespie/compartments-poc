@@ -155,13 +155,15 @@ class DividerCollectionModel(object):
 	@classmethod
 	def get_new_name(cls, collection):
 		choice = None
+		choice = 0
 		while not choice or choice in collection.names:
-			choice = ''.join(
-							[
-								random.choice(string.ascii_uppercase) \
-									for _ in range(GENERATED_NAME_LENGTH)
-							]
-						)
+			choice = choice + 1
+			# choice = ''.join(
+			# 				[
+			# 					random.choice(string.ascii_uppercase) \
+			# 						for _ in range(GENERATED_NAME_LENGTH)
+			# 				]
+			# 			)
 		return choice
 
 

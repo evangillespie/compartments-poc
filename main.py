@@ -10,7 +10,7 @@ from src.controllers.BuilderController import BuilderController
 	:param plan_number: which plan should I use? They're in the sample_plans folder.
 """
 @click.command()
-@click.argument('plan_number')
+@click.option('--plan-number', prompt=True)
 def draw_dxf_from_sample_plan(plan_number):
 
 	logging.basicConfig(
@@ -24,3 +24,7 @@ def draw_dxf_from_sample_plan(plan_number):
 	plan = OrganizerPlanController.get_sample_plan(plan_number)
 	
 	BuilderController.build_divider_collection_from_plan(plan)
+
+
+if __name__ == "__main__":
+	draw_dxf_from_sample_plan()

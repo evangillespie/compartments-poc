@@ -205,6 +205,7 @@ class DividerCollectionController(object):
 	@classmethod
 	def add_joinery_to_divider(cls, collection, divider, div_orientation, div_offset_in_comp, containing_compartment, width):
 
+
 		# add male joinery to left and right edges
 		DividerController.add_male_joinery_to_divider(divider, width)
 
@@ -232,6 +233,8 @@ class DividerCollectionController(object):
 
 		# Add male joinery for the base
 		DividerController.add_base_joinery_to_vertical_divider(divider)
+
+		print "%s:[%s]\t->\tcontaining_offset:%s\t\toffset_in_comp: %s" % (divider.name, divider.x_length, containing_offset, div_offset_in_comp)
 
 		# Add female joinery to the base		
 		base_fem_join_offset = (
