@@ -40,6 +40,5 @@ class OrganizerPlanModel(object):
 			sample_plan = import_module("src.sample_plans.sample_plan_" + str(plan_number))
 			return sample_plan.plan
 		except:
-			print "ERROR. See log"
 			logger.error("Can't import plan %s" % plan_number)
 			sys.exit()

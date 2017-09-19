@@ -234,8 +234,6 @@ class DividerCollectionController(object):
 		# Add male joinery for the base
 		DividerController.add_base_joinery_to_vertical_divider(divider)
 
-		print "%s:[%s]\t->\tcontaining_offset:%s\t\toffset_in_comp: %s" % (divider.name, divider.x_length, containing_offset, div_offset_in_comp)
-
 		# Add female joinery to the base		
 		base_fem_join_offset = (
 			div_offset_in_comp[0] + containing_offset[0] + divider.thickness,

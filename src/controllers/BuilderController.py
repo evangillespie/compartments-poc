@@ -51,6 +51,7 @@ class BuilderController(object):
 
 	:return:
 	"""
+	# @TODO: break this into smaller functions
 	@classmethod
 	def create_base_and_edge_dividers_from_plan(cls, collection, plan):
 
@@ -152,10 +153,11 @@ class BuilderController(object):
 
 	:return:
 	"""
+	# @TODO: this function is too long. Break it out into smaller ones.
 	@classmethod
 	def interpret_plan_into_compartments_and_dividers(cls, plan, collection):
 		
-		# height of the dividers is overall height - height of the base
+		# height of the vertical Dividers. They sit on top of the base Divider
 		div_height = plan['height'] - plan['thickness']
 
 
@@ -199,10 +201,8 @@ class BuilderController(object):
 					# x direction is read rightward and y is read upward.
 					if compartment_json['div_orientation'] == 'x':
 						new_div_length = compartment_json['compartments'][child_comp_index]['x_length']
-						new_div_offset = compartment_json['compartments'][child_comp_index]['y_length']
 					elif compartment_json['div_orientation'] == 'y':
 						new_div_length = compartment_json['compartments'][child_comp_index]['y_length']
-						new_div_offset = compartment_json['compartments'][child_comp_index]['x_length']
 					else:
 						logger.error("Weird div_orientation in plan: %s" % compartment_json['div_orientation'])
 
@@ -345,6 +345,7 @@ class BuilderController(object):
 
 	:return:
 	"""
+	# @TODO: Some of this logic should move to the DxfWriteController
 	@classmethod
 	def write_collection_dividers_to_dxf(cls, collection):
 		DxfWriteController.create_empty_dxf_directory(collection.id)

@@ -13,8 +13,8 @@
 plan = {
 	'x_length': 120,
 	'y_length': 200,
-	'height': 50,
-	'thickness': 6,	# Total heigth, including the base
+	'height': 50, # Total heigth, including the base
+	'thickness': 6,
 	'compartments': [
 		{
 			'level': 1,	# useful for debugging
