@@ -53,48 +53,9 @@ class BuilderController(object):
 	"""
 	@classmethod
 	def create_base_and_edge_dividers_from_plan(cls, collection, plan):
-
-		# create the base
-		base = DividerCollectionController.add_rectangular_divider_to_collection(
-			collection=collection,
-			x_length=plan['x_length'],
-			y_length=plan['y_length'],
-			thickness=plan['thickness' ],
-			name=OUTER_DIVIDER_NAME_BASE
-		)
-
-
-		#create the outer edges
+		
 		div_height = plan['height'] - plan['thickness']
-
-		left = DividerCollectionController.add_rectangular_divider_to_collection(
-			collection=collection,
-			x_length=plan['y_length'],
-			y_length=div_height,
-			thickness=plan['thickness' ],
-			name=OUTER_DIVIDER_NAME_LEFT
-		)
-		right = DividerCollectionController.add_rectangular_divider_to_collection(
-			collection=collection,
-			x_length=plan['y_length'],
-			y_length=div_height,
-			thickness=plan['thickness' ],
-			name=OUTER_DIVIDER_NAME_RIGHT
-		)
-		top = DividerCollectionController.add_rectangular_divider_to_collection(
-			collection=collection,
-			x_length=plan['x_length'] -  2*plan['thickness'],
-			y_length=div_height,
-			thickness=plan['thickness' ],
-			name=OUTER_DIVIDER_NAME_TOP
-		)
-		bottom = DividerCollectionController.add_rectangular_divider_to_collection(
-			collection=collection,
-			x_length=plan['x_length'] -  2*plan['thickness'],
-			y_length=div_height,
-			thickness=plan['thickness' ],
-			name=OUTER_DIVIDER_NAME_BOTTOM
-		)
+		(base, left, right, top, bottom) = cls.create_outer_divders(plan, collection, div_height)
 
 		#add joinery to the outer edges
 		#male edge joinery on the top, bottom, female on the left, right
@@ -144,6 +105,53 @@ class BuilderController(object):
 
 
 	"""
+	"""
+	@classmethod
+	def create_outer_divders(cls, plan, collection, div_height):
+
+		# create the base
+		base = DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=plan['x_length'],
+			y_length=plan['y_length'],
+			thickness=plan['thickness' ],
+			name=OUTER_DIVIDER_NAME_BASE
+		)
+
+		#create the outer edges
+		left = DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=plan['y_length'],
+			y_length=div_height,
+			thickness=plan['thickness' ],
+			name=OUTER_DIVIDER_NAME_LEFT
+		)
+		right = DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=plan['y_length'],
+			y_length=div_height,
+			thickness=plan['thickness' ],
+			name=OUTER_DIVIDER_NAME_RIGHT
+		)
+		top = DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=plan['x_length'] -  2*plan['thickness'],
+			y_length=div_height,
+			thickness=plan['thickness' ],
+			name=OUTER_DIVIDER_NAME_TOP
+		)
+		bottom = DividerCollectionController.add_rectangular_divider_to_collection(
+			collection=collection,
+			x_length=plan['x_length'] -  2*plan['thickness'],
+			y_length=div_height,
+			thickness=plan['thickness' ],
+			name=OUTER_DIVIDER_NAME_BOTTOM
+		)
+
+		return (base, left, right, top, bottom)
+
+
+	"""
 	Read through the plan (json) and create a bunch of suitible objects
 	and add those objects to a particular DividerCollection
 
@@ -154,7 +162,7 @@ class BuilderController(object):
 	"""
 	@classmethod
 	def interpret_plan_into_compartments_and_dividers(cls, plan, collection):
-		
+
 		# height of the dividers is overall height - height of the base
 		div_height = plan['height'] - plan['thickness']
 
